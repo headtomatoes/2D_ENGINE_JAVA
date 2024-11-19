@@ -1,5 +1,6 @@
 package AnhNe.Firstep;
 
+import AnhNe.Utility.Time;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -11,9 +12,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
     private int width, height;
     private String title;
+    public float r, g, b, a;
     private long glfwWindow;    // address for the window after creating it
                                 // just the way in C, we have a pointer to the window
 
+    private static Scene currentScene = null;
     // Singleton pattern: only one instance of Window can be created
     private static Window instance = null;
 
@@ -23,8 +26,27 @@ public class Window {
         width = 1920;
         height = 1080;
         title = "Firstep"; // changable
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
     }
 
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new LevelEditorScene();
+                // currentScene.init(); or update();
+                break;
+            case 1:
+                currentScene = new LevelScene();
+                // currentScene.init(); or update();
+                break;
+            default:
+                assert false : "Unknown scene '" + newScene + "'";
+                break;
+        }
+    }
     // Return the only instance of Window
     public static Window get() {
         if (instance == null) {
@@ -95,32 +117,33 @@ public class Window {
         // LWJGL detects the context that is current in the current thread,
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
-        GL.createCapabilities(); // break program if not called
+        GL.createCapabilities();    // break program if not called
 
+        //test
+        Window.changeScene(0);
     }
 
     // Main loop
     private void loop() {
-        System.out.println("Running main loop...");
+
+        float timeBegin = Time.getTime();
+        float timeEnd;
+        float deltaTime = -1.0f;
         while(!glfwWindowShouldClose(glfwWindow)) {
             // Poll for window events.
             glfwPollEvents();
 
-            glClearColor(1.0f, 1.0f, 1.0f, 0.2f);
+            glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                glfwSetWindowShouldClose(glfwWindow, true);
-            }
-            if(MouseListener.get().isDragging()) {
-                glClearColor(0.0f, 1.0f, 0.0f, 0.2f);
-                glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
-            }
-            if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                glClearColor(0.0f, 0.0f, 1.0f, 0.2f);
-                glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
+            if (deltaTime >= 0) {
+                currentScene.update(deltaTime);
             }
             glfwSwapBuffers(glfwWindow); // swap the color buffers
+
+            timeEnd = Time.getTime();
+            deltaTime = timeEnd - timeBegin;
+            timeBegin = timeEnd;
         }
     }
 }
