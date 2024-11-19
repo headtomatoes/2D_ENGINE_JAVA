@@ -36,8 +36,19 @@ public class Window {
     // Run the window
     public void run() {
         System.out.println("Running window with title: " + title + " and resolution: " + width + "x" + height);
+        System.out.println("Press ESC to close the window.");
         init();
         loop();
+        // Free the memory
+        glfwFreeCallbacks(glfwWindow);
+        glfwDestroyWindow(glfwWindow);
+        // Terminate GLFW and free the error callback
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
+    }
+
+    private void glfwFreeCallbacks(long glfwWindow) {
+
     }
 
     // Initialize the window
@@ -62,6 +73,13 @@ public class Window {
         if (glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create GLFW window.");
         }
+        // set up mouse callback
+        glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallBack);
+        glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallBack);
+        glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallBack);
+
+        // set up keyboard callback
+        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallBack);
 
         // make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
@@ -88,9 +106,20 @@ public class Window {
             // Poll for window events.
             glfwPollEvents();
 
-            glClearColor(1.0f, 0.0f, 0.0f, 0.0f);// full red, full alpha
+            glClearColor(1.0f, 1.0f, 1.0f, 0.2f);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
+            if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                glfwSetWindowShouldClose(glfwWindow, true);
+            }
+            if(MouseListener.get().isDragging()) {
+                glClearColor(0.0f, 1.0f, 0.0f, 0.2f);
+                glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
+            }
+            if(KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                glClearColor(0.0f, 0.0f, 1.0f, 0.2f);
+                glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
+            }
             glfwSwapBuffers(glfwWindow); // swap the color buffers
         }
     }
