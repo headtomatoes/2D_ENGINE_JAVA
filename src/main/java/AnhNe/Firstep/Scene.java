@@ -14,4 +14,7 @@ public abstract class Scene {
     public abstract void imguiUpdate();
 
     public abstract void cleanUp();
+
+    public void init() {
+    }
 }
