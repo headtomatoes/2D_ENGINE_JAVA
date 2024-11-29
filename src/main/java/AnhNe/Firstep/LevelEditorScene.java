@@ -1,6 +1,10 @@
 package AnhNe.Firstep;
 
 
+import AnhNe.Utility.Time;
+import Renderer.Shader;
+import Renderer.Texture;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -11,42 +15,20 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class LevelEditorScene extends Scene {
-    private String vertexShaderSource = "#version 460 core\n" +
-            "\n" +
-            "   layout(location = 0) in vec3 aPos;\n" +
-            "   layout(location = 1) in vec4 aCol;\n" +
-            "\n" +
-            "   out vec4 fCol;\n" +
-            "\n" +
-            "   void main()\n" +
-            "   {\n" +
-            "      fCol = aCol;\n" +
-            "      gl_Position = vec4(aPos, 1.0);\n" +
-            "   }";
-    private String fragmentShaderSource = "#version 460 core\n" +
-            "\n" +
-            "   in vec4 fCol;\n" +
-            "\n" +
-            "   out vec4 col;\n" +
-            "\n" +
-            "    void main()\n" +
-            "    {\n" +
-            "        col = fCol;\n" +
-            "    }";
-
     // Shader variables
-    private int vertexID, fragmentID, shaderProgram; // IDs for the shaders and the linking program
     private int vaoID, vboID, eboID; // IDs for the VAO, VBO and EBO
+    private Shader defaultShader;
+    private Texture testTexture;
 
     // Vertex Array Object (VAO) and Vertex Buffer Object (VBO)
     private float[] vertexArray = {
         // normalized device coordinates (NDC) for the vertexArray (x, y, z, r, g, b, a)
         // -1.0f to 1.0f is the range of NDC
-        // 1.Position                               //2.Color
-         0.7f,  -0.7f,  0.0f,                       1.0f, 0.0f, 0.0f, 1.0f,      // bottom right    0
-        -0.7f,   0.7f,  0.0f,                       0.0f, 1.0f, 0.0f, 1.0f,      // top left        1
-         0.7f,   0.7f,  0.0f,                       0.0f, 0.0f, 1.0f, 1.0f,      // top right       2
-        -0.7f,  -0.7f,  0.0f,                       1.0f, 1.0f, 0.0f, 1.0f,      // bottom left     3
+        // 1.Position                               //2.Color                       //3.Texture coordinates(UV mapping)
+         200.7f,    -0.7f,  0.0f,                   1.0f, 0.0f, 0.0f, 1.0f,         1,0,   // bottom right    0
+          -0.7f,   200.7f,  0.0f,                   0.0f, 1.0f, 0.0f, 1.0f,         0,1,   // top left        1
+         200.7f,   200.7f,  0.0f,                   0.0f, 0.0f, 1.0f, 1.0f,         1,1,   // top right       2
+          -0.7f,    -0.7f,  0.0f,                   1.0f, 1.0f, 0.0f, 1.0f,         0,0    // bottom left     3
     };
 
     // IMPORTANT: Must be in counter-clockwise order to let OpenGL know what the front face is.
@@ -68,61 +50,11 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
-        // =================== OPENGL ===================
-        // Compile the link shaders
-        // ===============================================
-
-        // First: load and compile the vertex shader
-        vertexID = glCreateShader(GL_VERTEX_SHADER);
-
-        // Second: pass the shader source to the GPU
-        glShaderSource(vertexID, vertexShaderSource);
-
-        // Third: compile the shader
-        glCompileShader(vertexID);
-
-        // Check for errors
-        int success = glGetShaderi(vertexID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tVertex shader compilation failed");
-            System.out.println(glGetShaderInfoLog(vertexID, len));
-            assert false : "";  // Stop the program if there is an error
-        }
-
-        // First: load and compile the fragment shader
-        fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-
-        // Second: pass the shader source to the GPU
-        glShaderSource(fragmentID, fragmentShaderSource);
-
-        // Third: compile the shader
-        glCompileShader(fragmentID);
-
-        // Check for errors
-        success = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tFragment shader compilation failed");
-            System.out.println(glGetShaderInfoLog(fragmentID, len));
-            assert false : "";  // Stop the program if there is an error
-        }
-
-        // Link the vertex and fragment shader into a shader program
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexID);
-        glAttachShader(shaderProgram, fragmentID);
-        glLinkProgram(shaderProgram);
-
-        // Check for linking errors
-        success = glGetProgrami(shaderProgram, GL_LINK_STATUS);
-        if (success == GL_FALSE) {
-            int len = glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH);
-            System.out.println("ERROR: 'defaultShader.glsl'\n\tLinking of shaders failed");
-            System.out.println(glGetProgramInfoLog(shaderProgram, len));
-            assert false : "";  // Stop the program if there is an error
-        }
-
+        this.camera = new Camera(new Vector2f(0.0f, 0.0f));
+        // Create the shader
+        defaultShader = new Shader("assets/shaders/default.glsl");
+        defaultShader.compile();
+        this.testTexture = new Texture("assets/image/areUGays.png");
         // ================================================================================
         // Generate VAO, VBO and EBO buffer objects, and send the vertex data to the GPU
         // ================================================================================
@@ -150,20 +82,39 @@ public class LevelEditorScene extends Scene {
         // Create and add the vertex attribute pointers for the VAO (how the VAO should read the VBO)
         int positionsSize = 3;  // The size of the position vector, which is 3 (x, y, z)
         int colorSize = 4;      // The size of the color vector, which is 4 (r, g, b, a)
-        int floatSizeBytes = 4; // A float is 4 bytes
-        int vertexSizeBytes = (positionsSize + colorSize) * floatSizeBytes;  // The size of a vertex in bytes (how many bytes each vertex is)
+        int uvSize = 2;         // The size of the uv vector, which is 2 (u, v)
+        int vertexSizeBytes = (positionsSize + colorSize + uvSize) * Float.BYTES;  // The size of a vertex in bytes (how many bytes each vertex is)
 
         // Tell OpenGL how to handle the VBO
         glVertexAttribPointer(0, positionsSize, GL_FLOAT, false, vertexSizeBytes, 0);  // Position attribute
         glEnableVertexAttribArray(0);  // Enable the attribute at position 0 in the .glsl file
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionsSize * floatSizeBytes);  // Color attribute
+        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionsSize * Float.BYTES);  // Color attribute
         glEnableVertexAttribArray(1);  // Enable the attribute at position 1 in the .glsl file
+
+        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionsSize + colorSize) * Float.BYTES);  // UV attribute
+        glEnableVertexAttribArray(2);  // Enable the attribute at position 2 in the .glsl file
     }
     @Override
     public void update(float deltaTime) {
-        // Bind the shader program
-        glUseProgram(shaderProgram);
+        // Update the camera
+        camera.position.x -= deltaTime * 20.0f;
+        camera.position.y -= deltaTime * 10.0f;
+        // Update the scene after deltaTime
+        defaultShader.use();
+
+        // Upload the Texture to the Shader
+        defaultShader.uploadTexture("TEX_SAMPLER", 0); // upload TO OpenGL the texture to slot 0
+        glActiveTexture(GL_TEXTURE0);   // Set the active state to texture unit 0
+        testTexture.bind();            // Bind the texture to texture unit 0
+
+        // Upload the projection matrix to the GPU for the shader to use
+        defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+
+        // Upload the view matrix to the GPU for the shader to use
+        defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+
+        defaultShader.uploadFloat("uTime", Time.getTime());
         // Bind the VAO that we're using
         glBindVertexArray(vaoID);
 
@@ -181,7 +132,7 @@ public class LevelEditorScene extends Scene {
         // Unbind the VAO
         glBindVertexArray(0); // Unbind the VAO when we're done so we don't accidentally draw extra stuff or tamper with its bound buffers
         // Unbind the shader program
-        glUseProgram(0); // Unbind the shader program when we're done so we don't accidentally modify it
+        defaultShader.detach(); // Unbind the shader program when we're done so we don't accidentally modify it
     }
     @Override
     public void render() {
