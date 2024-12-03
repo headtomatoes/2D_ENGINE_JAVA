@@ -8,13 +8,12 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
     private String filePath;
     private int textureID;
-
+    private int width, height, nrChannels;
 
     public Texture(String filePath) {
         this.filePath = filePath;
@@ -41,17 +40,26 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);      // height of the image
         IntBuffer nrChannels = BufferUtils.createIntBuffer(1);  // number of color channels in the image (RGB) or (RGBA) 3 or 4
 
+        // Flip the image vertically
+        stbi_set_flip_vertically_on_load(true);
         // stbi library function to load the image
         ByteBuffer image = stbi_load(filePath, width, height, nrChannels, 0);
 
         // Check if the image is loaded
         if (image != null) {
-            // Generate the texture
-            // level 0 is the base image level and level n is the nth mipmap reduction image
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        } else {
-            assert false : "Error: Texture not loaded image: " + filePath + "!";
+            this.width = width.get(0);
+            this.height = height.get(0);
+            if(nrChannels.get(0) == 3) {
+                // RGB image
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+            } else if(nrChannels.get(0) == 4) {
+                // RGBA image
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+            } else {
+                assert false : "Error: (Texture) Unknown number of channels '" + nrChannels.get(0) + "'";
+            }
+        }else {
+            assert false : "Error: (Texture) Failed to load image '" + filePath + "'";
         }
 
         // Free the image memory because we have already loaded it to the GPU let's free the memory slot for the later use
@@ -66,5 +74,13 @@ public class Texture {
     public void unbind() {
         // Unbind the texture from the current active texture unit to avoid any modification
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 }

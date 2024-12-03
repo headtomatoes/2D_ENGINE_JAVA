@@ -1,6 +1,5 @@
 package AnhNe.Firstep;
 
-import AnhNe.Utility.Time;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -26,10 +25,10 @@ public class Window {
         width = 1920;
         height = 1080;
         title = "Firstep"; // changable
-        r = 1;
-        g = 1;
-        b = 1;
-        a = 1;
+        r = 0;
+        g = 0;
+        b = 0;
+        a = 0;
     }
 
     public static void changeScene(int newScene) {
@@ -37,10 +36,12 @@ public class Window {
             case 0:
                 currentScene = new LevelEditorScene();
                 currentScene.init(); //or update();
+                currentScene.start();
                 break;
             case 1:
                 currentScene = new LevelScene();
                 currentScene.init(); //or update();
+                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
@@ -126,7 +127,7 @@ public class Window {
     // Main loop
     private void loop() {
 
-        float timeBegin = Time.getTime();
+        float timeBegin = (float)glfwGetTime();
         float timeEnd;
         float deltaTime = -1.0f;
         while(!glfwWindowShouldClose(glfwWindow)) {
@@ -141,9 +142,13 @@ public class Window {
             }
             glfwSwapBuffers(glfwWindow); // swap the color buffers
 
-            timeEnd = Time.getTime();
+            timeEnd = (float) glfwGetTime();
             deltaTime = timeEnd - timeBegin;
             timeBegin = timeEnd;
         }
+    }
+
+    public static Scene getScene() {
+        return get().currentScene;
     }
 }

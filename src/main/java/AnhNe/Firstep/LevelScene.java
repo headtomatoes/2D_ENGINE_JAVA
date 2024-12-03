@@ -13,24 +13,4 @@ public class LevelScene extends Scene {
     public void update(float deltaTime) {
 
     }
-
-    @Override
-    public void render() {
-
-    }
-
-    @Override
-    public void imgui() {
-
-    }
-
-    @Override
-    public void imguiUpdate() {
-
-    }
-
-    @Override
-    public void cleanUp() {
-
-    }
 }

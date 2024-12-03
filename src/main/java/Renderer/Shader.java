@@ -15,15 +15,13 @@ import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 public class Shader {
 
     private int shaderProgramID; // ID for the shader program in the GPU, for EX: vertex shader and fragment shader
+    private boolean statusUse = false; // Check if the shader is being used or not
 
     private String vertexSource;
     private String fragmentSource;
     private String filePath;
 
-    private boolean statusUse = false;
-
     public Shader(String filePath) {
-        System.out.println("Shader created!");
         this.filePath = filePath;
         try {
             // Read the file
@@ -68,18 +66,13 @@ public class Shader {
             e.printStackTrace();
             assert false : "Error: Could not open file for shader: '" + filePath + "'";
         }
-
-        System.out.println("Vertex source: " + vertexSource);
-        System.out.println("Fragment source: " + fragmentSource);
     }
 
     public void compile() {
-        System.out.println("Compiling shader: " + filePath);
-        int vertexID, fragmentID;
-
         // =================== OPENGL ===================
         // Compile the link shaders
         // ===============================================
+        int vertexID, fragmentID;
 
         // First: load and compile the vertex shader
         vertexID = glCreateShader(GL_VERTEX_SHADER);
@@ -217,5 +210,11 @@ public class Shader {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         use();
         glUniform1i(varLocation, slot);
+    }
+
+    public void uploadIntArray(String varName, int[] array) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1iv(varLocation, array);
     }
 }

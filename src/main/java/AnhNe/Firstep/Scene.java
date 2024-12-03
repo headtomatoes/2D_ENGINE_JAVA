@@ -1,7 +1,16 @@
 package AnhNe.Firstep;
 
+import Renderer.Renderer;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Scene {
+
+    protected Renderer renderer = new Renderer();
     protected Camera camera;
+    private boolean isRunning = false;
+    protected List<GameObject> gameObjects = new ArrayList<>();
 
     public Scene() {
 
@@ -9,14 +18,27 @@ public abstract class Scene {
 
     public abstract void update(float deltaTime);
 
-    public abstract void render();
+    public void init() {}
 
-    public abstract void imgui();
+    public void start() {
+        for (GameObject gameObject : gameObjects) {
+            gameObject.start();
+            this.renderer.add(gameObject);
+        }
+        isRunning = true;
+    }
 
-    public abstract void imguiUpdate();
+    public void addGameObjectToScene(GameObject gameObject) {
+        if(!isRunning) {
+            gameObjects.add(gameObject);
+        } else {
+            gameObjects.add(gameObject);
+            gameObject.start();
+            this.renderer.add(gameObject);
+        }
+    }
 
-    public abstract void cleanUp();
-
-    public void init() {
+    public Camera camera() {
+        return this.camera;
     }
 }
