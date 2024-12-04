@@ -4,6 +4,7 @@ import AnhNe.Components.SpriteRenderer;
 import AnhNe.Firstep.Window;
 import AnhNe.Utility.AssetPool;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -15,7 +16,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch> {
     // Vertex of 2D game => 2D vertex
     //=========
     // position                             color                                texture coordinates(UV mapping)            texture ID
@@ -48,7 +49,11 @@ public class RenderBatch {
     private int maxBatchSize;
     private Shader shader;
 
-    public RenderBatch(int maxBatchSize) {
+    //blending variables
+    private int zIndex;
+
+    public RenderBatch(int maxBatchSize, int zIndex) {
+        this.zIndex = zIndex;
         shader = AssetPool.getShader("assets/shaders/default.glsl");
         this.spritesArray = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -133,6 +138,7 @@ public class RenderBatch {
             if(sprite.isDirty()) {
                 loadVertexProperties(i);
                 sprite.setClean();
+                rebufferData = true;
             }
         }
 
@@ -140,8 +146,7 @@ public class RenderBatch {
             glBindBuffer(GL_ARRAY_BUFFER, VBO_ID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, verticesArray);
         }
-        //for now, we will re-buffer all data every frame
-        //later we will only re-buffer data when something has changed
+
         glBindBuffer(GL_ARRAY_BUFFER, VBO_ID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, verticesArray);
 
@@ -268,4 +273,16 @@ public class RenderBatch {
         return this.textures.contains(texture);
     }
 
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    @Override
+    public int compareTo(RenderBatch object) {
+        // Compare the zIndex of the current object with the object passed in
+        return Integer.compare(this.zIndex, object.zIndex);
+        // if the current object is greater than the object passed in, return 1
+        // if the current object is less than the object passed in, return -1
+        // if the current object is equal to the object passed in, return 0
+    }
 }

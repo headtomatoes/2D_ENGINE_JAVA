@@ -25,10 +25,10 @@ public class Window {
         width = 1920;
         height = 1080;
         title = "Firstep"; // changable
-        r = 0;
-        g = 0;
-        b = 0;
-        a = 0;
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
     }
 
     public static void changeScene(int newScene) {
@@ -120,6 +120,11 @@ public class Window {
         // bindings available for use.
         GL.createCapabilities();    // break program if not called
 
+        // Enable transparency
+        glEnable(GL_BLEND);
+        // Set the blend function to use the source alpha and 1 minus source alpha
+        // which basically interpolates the alpha value of the source color
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         //test
         Window.changeScene(0);
     }

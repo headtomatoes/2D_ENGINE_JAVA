@@ -24,11 +24,11 @@ public class LevelEditorScene extends Scene {
 
         sprites = AssetPool.getSpriteSheet("assets/image/spritesheet.png");
 //        SpriteSheet sprites = AssetPool.getSpriteSheet("assets/image/_Run.png");
-        obj1 = new GameObject("object1", new Transform(new Vector2f(200,200) , new Vector2f(256,256)));
+        obj1 = new GameObject("object1", new Transform(new Vector2f(200,200) , new Vector2f(256,256)), 3);
         obj1.addComponent(new SpriteRenderer(sprites.getSprite(5)));
         this.addGameObjectToScene(obj1);
 
-        GameObject obj2 = new GameObject("object2", new Transform(new Vector2f(600,200) , new Vector2f(256,256)));
+        GameObject obj2 = new GameObject("object2", new Transform(new Vector2f(400,200) , new Vector2f(256,256)),-2);
         obj2.addComponent(new SpriteRenderer(sprites.getSprite(10)));
         this.addGameObjectToScene(obj2);
 
@@ -45,22 +45,8 @@ public class LevelEditorScene extends Scene {
 
     }
 
-    // test animation
-    private int spriteIndex = 0;
-    private float spriteFliptime = 0.2f;
-    private float spriteFliptimeLeft = 0.0f;
-
     @Override
     public void update(float deltaTime) {
-        spriteFliptimeLeft -= deltaTime;
-        if(spriteFliptimeLeft <= 0) {
-            spriteIndex++;
-            spriteFliptimeLeft = spriteFliptime;
-            if (spriteIndex >= 4) {
-                spriteIndex = 0;
-            }
-            obj1.getComponent(SpriteRenderer.class).setSprite(sprites.getSprite(spriteIndex));
-        }
         // Update the game objects
         for (GameObject gameObject : this.gameObjects) {
             gameObject.update(deltaTime);
