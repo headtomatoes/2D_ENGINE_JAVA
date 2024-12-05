@@ -37,7 +37,9 @@ public class SpriteSheet {
             };
 
             // add the sprite to the list of sprites
-            Sprite sprite = new Sprite(this.texture, texCoords);
+            Sprite sprite = new Sprite();
+            sprite.setTexture(this.texture);
+            sprite.setTexCoords(texCoords);
             this.sprites.add(sprite);
 
             // move to the next sprites

@@ -9,10 +9,6 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
 
 tasks.test {
     useJUnitPlatform()
@@ -20,11 +16,31 @@ tasks.test {
 
 val lwjglVersion = "3.3.4"
 val jomlVersion = "1.10.7"
-val lwjglNatives = "natives-windows"
+val imGuiVersion = "1.81.0"
+// Detect the current operating system for native libraries
+val lwjglNatives = when (System.getProperty("os.name").lowercase()) {
+    "mac os x" -> "natives-macos"
+    "linux" -> "natives-linux"
+    else -> "natives-windows"
+}
 
 dependencies {
-    implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+    // GSON
+    implementation("com.google.code.gson:gson:2.11.0")
+    // JUnit for testing
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 
+
+    // ImGui Java Bindings
+    implementation("io.github.spair:imgui-java-app:$imGuiVersion")
+    implementation("io.github.spair:imgui-java-binding:$imGuiVersion")
+    implementation("io.github.spair:imgui-java-lwjgl3:$imGuiVersion")
+    implementation(fileTree("libs") {
+        include("*.jar")
+    })
+    // LWJGL Core
+    implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
     implementation("org.lwjgl", "lwjgl")
     implementation("org.lwjgl", "lwjgl-assimp")
     implementation("org.lwjgl", "lwjgl-bgfx")
@@ -114,3 +130,9 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-zstd", classifier = lwjglNatives)
     implementation("org.joml", "joml", jomlVersion)
 }
+
+// Configure testing
+tasks.test {
+    useJUnitPlatform()
+}
+

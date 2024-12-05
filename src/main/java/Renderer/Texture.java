@@ -2,6 +2,7 @@ package Renderer;
 
 import org.lwjgl.BufferUtils;
 
+import java.io.File;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -15,7 +16,11 @@ public class Texture {
     private int textureID;
     private int width, height, nrChannels;
 
-    public Texture(String filePath) {
+    public Texture() {
+
+    }
+
+    public void init(String filePath){
         this.filePath = filePath;
 
         // Generate texture on GPU

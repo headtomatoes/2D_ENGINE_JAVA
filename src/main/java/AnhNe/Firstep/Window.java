@@ -9,6 +9,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 // Mostly come from getting-started-with-lwjgl3 tutorial
 public class Window {
+    private ImGui_Layer imGuiLayer = null;
     private int width, height;
     private String title;
     public float r, g, b, a;
@@ -100,6 +101,11 @@ public class Window {
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallBack);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallBack);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallBack);
+        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallBack);
+        glfwSetWindowSizeCallback(glfwWindow, (window, newWidth, newHeight) -> {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
 
         // set up keyboard callback
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallBack);
@@ -125,9 +131,15 @@ public class Window {
         // Set the blend function to use the source alpha and 1 minus source alpha
         // which basically interpolates the alpha value of the source color
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        // Initialize ImGui
+        this.imGuiLayer = new ImGui_Layer(glfwWindow);
+        this.imGuiLayer.initImGui();
+
         //test
         Window.changeScene(0);
     }
+
 
     // Main loop
     private void loop() {
@@ -135,6 +147,8 @@ public class Window {
         float timeBegin = (float)glfwGetTime();
         float timeEnd;
         float deltaTime = -1.0f;
+
+        currentScene.load();
         while(!glfwWindowShouldClose(glfwWindow)) {
             // Poll for window events.
             glfwPollEvents();
@@ -145,15 +159,35 @@ public class Window {
             if (deltaTime >= 0) {
                 currentScene.update(deltaTime);
             }
+            this.imGuiLayer.update(deltaTime, currentScene);
             glfwSwapBuffers(glfwWindow); // swap the color buffers
 
             timeEnd = (float) glfwGetTime();
             deltaTime = timeEnd - timeBegin;
             timeBegin = timeEnd;
         }
+
+        currentScene.saveExit();
     }
 
     public static Scene getScene() {
         return get().currentScene;
     }
+
+    public static int getWidth() {
+        return get().width;
+    }
+
+    public static int getHeight() {
+        return get().height;
+    }
+
+    private static void setHeight(int newHeight) {
+        get().height = newHeight;
+    }
+
+    private static void setWidth(int newWidth) {
+        get().width = newWidth;
+    }
+
 }
