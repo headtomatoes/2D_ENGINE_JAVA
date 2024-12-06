@@ -20,7 +20,7 @@ public abstract class Scene {
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
     protected GameObject activeGameObject = null;
-    private boolean levelLoaded = false;
+    protected boolean levelLoaded = false;
 
     public Scene() {
 
@@ -95,7 +95,7 @@ public abstract class Scene {
             e.printStackTrace();
         }
 
-        if(inFile.equals("")) {
+        if(!inFile.equals("")) {
             GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
             for (GameObject obj : objs) {
                 addGameObjectToScene(obj);
