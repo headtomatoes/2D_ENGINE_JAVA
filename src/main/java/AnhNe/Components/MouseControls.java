@@ -3,6 +3,7 @@ package AnhNe.Components;
 import AnhNe.Firstep.GameObject;
 import AnhNe.Firstep.Window;
 import AnhNe.Input_Manager.MouseListener;
+import AnhNe.Utility.Settings;
 import org.joml.Vector2f;
 
 
@@ -26,8 +27,12 @@ public class MouseControls extends Component {
 
     public void update(float deltaTime) {
         if (holdingObject != null) {
-            holdingObject.transform.position.x = MouseListener.getOrthoX() - offset.x;
-            holdingObject.transform.position.y = MouseListener.getOrthoY() - offset.y;
+            holdingObject.transform.position.x = MouseListener.getOrthoX();
+            holdingObject.transform.position.y = MouseListener.getOrthoY();
+
+            // Snapping the object onto the grid by trunked the position to the nearest grid position
+            holdingObject.transform.position.x = (int)(holdingObject.transform.position.x / Settings.GRID_WIDTH) * Settings.GRID_WIDTH;
+            holdingObject.transform.position.y = (int)(holdingObject.transform.position.y / Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT;
 
             // Drop object when left mouse button is pressed again
             // Future plan: Add a true drag and drop logic
