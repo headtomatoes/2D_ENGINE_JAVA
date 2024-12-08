@@ -1,5 +1,11 @@
 package AnhNe.Firstep;
 
+import AnhNe.Input_Manager.KeyListener;
+import AnhNe.Input_Manager.MouseListener;
+import AnhNe.Scene_Manager.LevelEditorScene;
+import AnhNe.Scene_Manager.LevelScene;
+import AnhNe.Scene_Manager.Scene;
+import Renderer.DebugDraw;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -36,18 +42,17 @@ public class Window {
         switch (newScene) {
             case 0:
                 currentScene = new LevelEditorScene();
-                currentScene.init(); //or update();
-                currentScene.start();
                 break;
             case 1:
                 currentScene = new LevelScene();
-                currentScene.init(); //or update();
-                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
                 break;
         }
+        currentScene.load();
+        currentScene.init(); //or update();
+        currentScene.start();
     }
     // Return the only instance of Window
     public static Window get() {
@@ -97,6 +102,7 @@ public class Window {
         if (glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create GLFW window.");
         }
+
         // set up mouse callback
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallBack);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallBack);
@@ -148,15 +154,16 @@ public class Window {
         float timeEnd;
         float deltaTime = -1.0f;
 
-        currentScene.load();
         while(!glfwWindowShouldClose(glfwWindow)) {
             // Poll for window events.
             glfwPollEvents();
+            DebugDraw.beginFrame();
 
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
             if (deltaTime >= 0) {
+                DebugDraw.drawLine2D();
                 currentScene.update(deltaTime);
             }
             this.imGuiLayer.update(deltaTime, currentScene);

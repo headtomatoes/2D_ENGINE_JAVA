@@ -1,5 +1,8 @@
 package AnhNe.Firstep;
 
+import AnhNe.Input_Manager.KeyListener;
+import AnhNe.Input_Manager.MouseListener;
+import AnhNe.Scene_Manager.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
 import imgui.ImGui;
@@ -8,7 +11,6 @@ import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
-import imgui.glfw.ImGuiImplGlfw;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -94,6 +96,11 @@ public class ImGui_Layer {
             io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
             io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
             io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+
+            if(!io.getWantCaptureKeyboard()){
+                // forward mouse button event to the MouseListener(my engine's class) because in OpenGL, just one glfw(same type) callback can be set once at a time
+                KeyListener.keyCallBack(w, key, scancode, action, mods);
+            }
         });
 
         glfwSetCharCallback( glwfWindow, (w, c) -> {
@@ -115,6 +122,11 @@ public class ImGui_Layer {
 
             if (!io.getWantCaptureMouse() && mouseDown[1]) {
                 ImGui.setWindowFocus(null);
+            }
+
+            if(!io.getWantCaptureMouse()){
+                // forward mouse button event to the MouseListener(my engine's class) because in OpenGL, just one glfw(same type) callback can be set once at a time
+                MouseListener.mouseButtonCallBack(w, button, action, mods);
             }
         });
 

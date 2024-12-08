@@ -40,6 +40,8 @@ public class SpriteSheet {
             Sprite sprite = new Sprite();
             sprite.setTexture(this.texture);
             sprite.setTexCoords(texCoords);
+            sprite.setWidth(spriteWidth);
+            sprite.setHeight(spriteHeight);
             this.sprites.add(sprite);
 
             // move to the next sprites
@@ -56,5 +58,9 @@ public class SpriteSheet {
 
         return sprites.get(index);
 
+    }
+
+    public int size() {
+        return sprites.size();
     }
 }

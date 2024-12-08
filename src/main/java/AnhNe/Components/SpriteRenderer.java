@@ -1,6 +1,5 @@
 package AnhNe.Components;
 
-import AnhNe.Firstep.Component;
 import AnhNe.Firstep.Transform;
 import Renderer.Texture;
 import imgui.ImGui;
@@ -12,7 +11,7 @@ public class SpriteRenderer extends Component {
     private Sprite sprite = new Sprite();
 
     private transient Transform lastTransform;
-    private transient boolean isDirty = false;
+    private transient boolean isDirty = true;
 
     public SpriteRenderer() {
         // constructor

@@ -1,4 +1,6 @@
-package AnhNe.Firstep;
+package AnhNe.Scene_Manager;
+
+import AnhNe.Firstep.Window;
 
 public class LevelScene extends Scene {
 

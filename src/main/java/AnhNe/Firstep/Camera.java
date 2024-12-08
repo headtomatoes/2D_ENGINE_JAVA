@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 public class Camera {
     //x, y, z, w
-    private Matrix4f projectionMatrix, viewMatrix;
+    private Matrix4f projectionMatrix, viewMatrix , inverseProjection, inverseView;
     public Vector2f position;
 
     // Constructor creates a camera with a given position and initializes the projection and view matrix
@@ -15,6 +15,8 @@ public class Camera {
         this.position = position;
         this.projectionMatrix = new Matrix4f();
         this.viewMatrix = new Matrix4f();
+        this.inverseProjection = new Matrix4f();
+        this.inverseView = new Matrix4f();
         adjustProjection();
     }
 
@@ -34,6 +36,9 @@ public class Camera {
         // the near and far values are the distances from the camera to the near and far clipping planes
         projectionMatrix.ortho(0.0f, 32.0f * 40.0f , 0.0f, 32.0f * 21.0f, 0.0f, 100.0f);
 
+        // invert the projection matrix to get the inverse projection matrix
+        // get the inverse projection matrix to transform the screen space to the world space
+        projectionMatrix.invert(inverseProjection);
     }
 
     // Adjust the view matrix in the world space
@@ -56,11 +61,26 @@ public class Camera {
         this.viewMatrix.lookAt(new Vector3f(position.x, position.y, 20.0f),
                                 cameraFront.add(position.x, position.y, 0.0f),
                                 cameraUp);
+
+        // invert the view matrix to get the inverse view matrix
+        // get the inverse view matrix to transform the world space to the camera space
+        this.viewMatrix.invert(inverseView);
+
         return this.viewMatrix;
     }
 
     // Get the projection matrix
     public Matrix4f getProjectionMatrix() {
         return this.projectionMatrix;
+    }
+
+    // Get the inverse projection matrix
+    public Matrix4f getInverseProjectionMatrix() {
+        return this.inverseProjection;
+    }
+
+    // Get the inverse view matrix
+    public Matrix4f getInverseViewMatrix() {
+        return this.inverseView;
     }
 }

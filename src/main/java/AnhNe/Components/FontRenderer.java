@@ -1,7 +1,5 @@
 package AnhNe.Components;
 
-import AnhNe.Firstep.Component;
-
 public class FontRenderer extends Component {
 
 

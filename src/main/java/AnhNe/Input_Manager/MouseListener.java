@@ -1,4 +1,7 @@
-package AnhNe.Firstep;
+package AnhNe.Input_Manager;
+
+import AnhNe.Firstep.Window;
+import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -7,7 +10,7 @@ public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
     private double xPos, yPos, lastX, lastY;
-    private boolean[] mouseButtonPressed = new boolean[3]; // 0 = left, 1 = right, 2 = middle
+    private boolean[] mouseButtonPressed = new boolean[9]; // 0 = left, 1 = right, 2 = middle
     private boolean isDragging; // true if dragging
 
     // Constructor is private, so no one can create a new MouseListener
@@ -101,5 +104,29 @@ public class MouseListener {
         } else {
             return false;
         }
+    }
+
+    public static float getOrthoX() {
+        float currentX = getX();
+        currentX = (currentX) / (float) Window.getWidth() * 2.0f - 1.0f;  // NDC = normalized device coordinates
+
+        // last 1 for the w component to keep the integrity of the multiplication with the matrix
+        Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
+        tmp.mul(Window.getScene().camera().getInverseProjectionMatrix()).mul(Window.getScene().camera().getInverseViewMatrix());
+        currentX = tmp.x;
+        System.out.println(currentX);
+        return currentX;
+    }
+
+    public static float getOrthoY() {
+        float currentY = Window.getHeight() - getY(); // because the y-axis is flipped in the window
+        currentY = (currentY) / (float)Window.getHeight() * 2.0f - 1.0f;  // NDC = normalized device coordinates
+
+        // last 1 for the w component to keep the integrity of the multiplication with the matrix
+        Vector4f tmp = new Vector4f(0, currentY, 0, 1);
+        tmp.mul(Window.getScene().camera().getInverseProjectionMatrix()).mul(Window.getScene().camera().getInverseViewMatrix());
+        currentY = tmp.y;
+        System.out.println(currentY);
+        return currentY;
     }
 }

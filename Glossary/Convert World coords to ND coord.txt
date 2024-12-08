@@ -1,0 +1,7 @@
+the left most in World coords is the starting position of the camera
+and the right most in World coords is the ending position of the camera
+            which is the width of the camera + the X starting position of the camera
+the top most in World coords is the starting position of the camera
+and the bottom most in World coords is the ending position of the camera
+            which is the height of the camera + the Y starting position of the camera
+*/

@@ -1,5 +1,6 @@
 package AnhNe.Firstep;
 
+import AnhNe.Components.Component;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

@@ -1,6 +1,10 @@
-package AnhNe.Firstep;
+package AnhNe.Scene_Manager;
 
-import AnhNe.Components.SpriteRenderer;
+import AnhNe.Components.Component;
+import AnhNe.Components.ComponentsDeserializer;
+import AnhNe.Firstep.Camera;
+import AnhNe.Firstep.GameObject;
+import AnhNe.Firstep.GameObjectDeserializer;
 import Renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -63,44 +67,57 @@ public abstract class Scene {
     public void imgui() {
 
     }
-
-    public void saveExit(){
-        Gson gson = new GsonBuilder()
+    private Gson createGson() {
+        return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Component.class, new ComponentsDeserializer())
-                .registerTypeAdapter(Component.class, new GameObjectDeserializer())
-                .create(); // import Gson library to use this
-
-        try {
-            FileWriter writer = new FileWriter("level.txt");
+                .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                .create();
+    }
+    public void saveExit(){
+        try (FileWriter writer = new FileWriter("levelTest.txt")) {
+            Gson gson = createGson();
             writer.write(gson.toJson(this.gameObjects));
-            writer.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            // Consider adding more robust error handling
+            // Perhaps log to a file or show a user-friendly error message
         }
     }
 
     public void load() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Component.class, new ComponentsDeserializer())
-                .registerTypeAdapter(Component.class, new GameObjectDeserializer())
-                .create(); // import Gson library to use this
-
-        String inFile = "";
-
         try {
-            inFile = new String(Files.readAllBytes(Paths.get("level.txt")));
+            String inFile = new String(Files.readAllBytes(Paths.get("levelTest.txt")));
+
+            if (!inFile.isEmpty()) {
+                Gson gson = createGson();
+
+                int maxGameObjectId = -1;
+                int maxComponentId = -1;
+                GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
+                for (int i = 0; i < objs.length; i++) {
+                    addGameObjectToScene(objs[i]);
+
+                    for (Component component : objs[i].getAllComponents()) {
+                        if (component.getUID() > maxComponentId) {
+                            maxComponentId = component.getUID();
+                        }
+                    }
+
+                    if (objs[i].getUID() > maxGameObjectId) {
+                        maxGameObjectId = objs[i].getUID();
+                    }
+                }
+
+                maxGameObjectId++;
+                maxComponentId++;
+                GameObject.init(maxGameObjectId);
+                Component.init(maxComponentId);
+                this.levelLoaded = true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        if(!inFile.equals("")) {
-            GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
-            for (GameObject obj : objs) {
-                addGameObjectToScene(obj);
-            }
-            this.levelLoaded = true;
+            this.levelLoaded = false;
         }
     }
 }
