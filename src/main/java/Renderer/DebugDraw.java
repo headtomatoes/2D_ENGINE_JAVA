@@ -63,7 +63,7 @@ public class DebugDraw {
     }
 
     public static void drawLine2D(){
-        if (lines.size() <= 0){
+        if (lines.isEmpty()){
             return;
         }
         int index = 0;
@@ -126,6 +126,92 @@ public class DebugDraw {
         if (lines.size() >= MAX_LINES){
             return;
         }
-        DebugDraw.lines.add(new Lines2D(from, to, color, lifetime));
+        lines.add(new Lines2D(from, to, color, lifetime));
+    }
+
+    // ========================================================
+    // Add BOX_2D methods
+    // ========================================================
+    public static void addBox2D(Vector2f center, Vector2f dimension, float rotation){
+        // TODO: constant color for common color like RED, GREEN, BLUE
+        addBox2D(center, dimension,rotation, new Vector3f(0.0f, 1.0f, 0.0f), 1);
+    }
+
+    public static void addBox2D(Vector2f center, Vector2f dimension, float rotation,Vector3f color){
+        addBox2D(center, dimension,rotation, color, 1);
+    }
+    public static void addBox2D(Vector2f center, Vector2f dimension, float rotation, Vector3f color, int lifetime) {
+        // Calculate the box's bounding corners
+        Vector2f halfDimension = new Vector2f(dimension).div(2);  // Half dimensions
+        Vector2f min = new Vector2f(center).sub(halfDimension);
+        Vector2f max = new Vector2f(center).add(halfDimension);
+
+        // Define the four corners of the box (without rotation yet)
+        Vector2f[] vertices = new Vector2f[4];
+        vertices[0] = new Vector2f(min.x, min.y); // Bottom-left
+        vertices[1] = new Vector2f(min.x, max.y); // Top-left
+        vertices[2] = new Vector2f(max.x, max.y); // Top-right
+        vertices[3] = new Vector2f(max.x, min.y); // Bottom-right
+
+        // If rotation is needed, rotate each vertex
+        if (rotation != 0.0f) {
+            for (int i = 0; i < vertices.length; i++) {
+                vertices[i] = rotate(vertices[i], rotation, center); // Rotate vertices around the center
+            }
+        }
+
+        // Add the edges of the box (4 lines)
+        addLine2D(vertices[0], vertices[1], color, lifetime); // 0 -> 1
+        addLine2D(vertices[1], vertices[2], color, lifetime); // 1 -> 2
+        addLine2D(vertices[2], vertices[3], color, lifetime); // 2 -> 3
+        addLine2D(vertices[3], vertices[0], color, lifetime); // 3 -> 0
+    }
+
+
+    public static Vector2f rotate(Vector2f vec, float angleDeg, Vector2f origin) {
+        // Translate the vector back to the origin
+        float x = vec.x - origin.x;
+        float y = vec.y - origin.y;
+
+        // Convert the angle from degrees to radians
+        float cos = (float) Math.cos(Math.toRadians(angleDeg));
+        float sin = (float) Math.sin(Math.toRadians(angleDeg));
+
+        // Rotate the point
+        float xPrime = (x * cos) - (y * sin);
+        float yPrime = (x * sin) + (y * cos);
+
+        // Translate the point back to its original position
+        return new Vector2f(xPrime + origin.x, yPrime + origin.y); // Return a new rotated vector
+    }
+
+    // ========================================================
+    // Add CIRCLE_2D methods
+    // ========================================================
+    public static void addCircle2D(Vector2f center, float radius){
+        // TODO: constant color for common color like RED, GREEN, BLUE
+        addCircle2D(center, radius, new Vector3f(0.0f, 1.0f, 0.0f), 1);
+    }
+
+    public static void addCircle2D(Vector2f center, float radius,Vector3f color){
+        addCircle2D(center, radius, color, 1);
+    }
+    public static void addCircle2D(Vector2f center, float radius, Vector3f color, int lifetime){
+        int segments = 30; // 360 segments for a full circle
+        Vector2f[] points = new Vector2f[segments];
+        int increment = 360 / points.length;
+        int currentAngle = 0;
+
+        for (int i = 0; i < points.length; i++) {
+            Vector2f tmp = new Vector2f(radius, 0);
+            rotate(tmp, currentAngle, new Vector2f());
+            points[i] = new Vector2f(tmp).add(center);
+
+            if(i > 0){
+                addLine2D(points[i-1], points[i], color, lifetime);
+            }
+            currentAngle += increment;
+        }
+        addLine2D(points[points.length - 1], points[0], color, lifetime);
     }
 }

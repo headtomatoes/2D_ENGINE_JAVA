@@ -6,6 +6,7 @@ import AnhNe.Scene_Manager.LevelEditorScene;
 import AnhNe.Scene_Manager.LevelScene;
 import AnhNe.Scene_Manager.Scene;
 import Renderer.DebugDraw;
+import Renderer.FrameBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -21,8 +22,9 @@ public class Window {
     public float r, g, b, a;
     private long glfwWindow;    // address for the window after creating it
                                 // just the way in C, we have a pointer to the window
+    private FrameBuffer frameBuffer;
+    private static Scene currentScene;
 
-    private static Scene currentScene = null;
     // Singleton pattern: only one instance of Window can be created
     private static Window instance = null;
 
@@ -141,7 +143,7 @@ public class Window {
         // Initialize ImGui
         this.imGuiLayer = new ImGui_Layer(glfwWindow);
         this.imGuiLayer.initImGui();
-
+        this.frameBuffer = new FrameBuffer(1920, 1080);
         //test
         Window.changeScene(0);
     }
@@ -162,10 +164,13 @@ public class Window {
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
+            this.frameBuffer.bind();
             if (deltaTime >= 0) {
                 DebugDraw.drawLine2D();
                 currentScene.update(deltaTime);
             }
+            this.frameBuffer.unbind();
+
             this.imGuiLayer.update(deltaTime, currentScene);
             glfwSwapBuffers(glfwWindow); // swap the color buffers
 
@@ -178,7 +183,7 @@ public class Window {
     }
 
     public static Scene getScene() {
-        return get().currentScene;
+        return currentScene;
     }
 
     public static int getWidth() {

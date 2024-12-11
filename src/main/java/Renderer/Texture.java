@@ -12,12 +12,24 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
-    private String filePath;
-    private int textureID;
-    private int width, height, nrChannels;
+    private String filePath;         // no change after initialization
+    private int textureID; // change after each initialization
+    private int width, height;
 
-    public Texture() {
+    public Texture() { // default constructor = error
+        textureID = -1;
+        width = -1;
+        height = -1;
+    }
 
+    public Texture(int width, int height) { // set up a blank texture for the framebuffer
+        this.filePath = "Generated";
+
+        // Generate texture on GPU
+        textureID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     }
 
     public void init(String filePath){
@@ -91,5 +103,26 @@ public class Texture {
 
     public int getID() {
         return this.textureID;
+    }
+
+    public String getFilePath() {
+        return this.filePath;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if(!(obj instanceof Texture)) {
+            return false;
+        }
+        Texture objTex = (Texture) obj;
+        return objTex.getWidth() == this.getWidth() && objTex.getHeight() == this.getHeight() && objTex.getID() == this.getID() && objTex.getFilePath().equals(this.getFilePath());
+    }
+
+
+    public void cleanup() {
+        glDeleteTextures(textureID);
     }
 }

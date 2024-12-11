@@ -13,8 +13,7 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 public class RenderBatch implements Comparable<RenderBatch> {
     // Vertex of 2D game => 2D vertex
@@ -22,7 +21,9 @@ public class RenderBatch implements Comparable<RenderBatch> {
     // position                             color                                texture coordinates(UV mapping)            texture ID
     // x, y                                 r, g, b, a
     // float, float                         float, float, float, float           float, float                               float
-
+    // TODO: cache for projection matrix and view matrix
+    // TODO: reduce the number use of hasRoom and hasTextureRoom
+    // TODO: more efficient way to look for the texture ID in the list of textures(HashMap <Texture, Integer> rather than List<Texture>)
 
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
@@ -197,7 +198,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
         // loop through the array of textures to find the index of the texture
         if(sprite.getTexture() != null) {                       // Check if this sprite has a texture
             for (int i = 0; i < textures.size(); i++) {         // Find the index of the texture in the list
-                if(textures.get(i) == sprite.getTexture()) {
+                if(textures.get(i).equals(sprite.getTexture())) {
                     texID = i + 1;
                     break;
                 }

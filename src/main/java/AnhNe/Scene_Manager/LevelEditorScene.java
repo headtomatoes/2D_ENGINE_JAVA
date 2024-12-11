@@ -36,8 +36,9 @@ public class LevelEditorScene extends Scene {
         // block sprite sheet
         sprites = AssetPool.getSpriteSheet("assets/spriteSheet/mario/decorationsAndBlocks.png");
         if(levelLoaded) {
-            this.activeGameObject = this.gameObjects.get(0);
-            return;
+            if (gameObjects.size() > 0) {
+                this.activeGameObject = gameObjects.get(0);
+            }
         }
 
 //        obj1 = new GameObject("object1", new Transform(new Vector2f(100,200) , new Vector2f(256,256)), 3);
@@ -68,10 +69,19 @@ public class LevelEditorScene extends Scene {
                 new SpriteSheet(AssetPool.getTexture("assets/spriteSheet/mario/decorationsAndBlocks.png"),
                             16, 16, 81, 0));
 
-
         AssetPool.getTexture("assets/image/areUGays.png");
+
+        for (GameObject gObj : gameObjects) {
+            if(gObj.getComponent(SpriteRenderer.class) != null) {
+                SpriteRenderer sprite = gObj.getComponent(SpriteRenderer.class);
+                if(sprite.getTexture() == null) {
+                    sprite.setTexture(AssetPool.getTexture(sprite.getTexture().getFilePath()));
+                }
+            }
+        }
     }
 
+    float angle = 0.0f;
     @Override
     public void update(float deltaTime) {
         // Update the level editor stuff (grid lines, mouse controls) currently
