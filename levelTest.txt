@@ -568,5 +568,119 @@
       }
     },
     "zIndex": 0
+  },
+  {
+    "uID": 11,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "AnhNe.Components.SpriteRenderer",
+        "data": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
+              "textureID": 3,
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.2857143,
+                "y": 0.5833333
+              },
+              {
+                "x": 0.2857143,
+                "y": 0.5
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5833333
+              }
+            ]
+          },
+          "uID": 16
+        }
+      }
+    ],
+    "transform": {
+      "position": {
+        "x": 352.0,
+        "y": 64.0
+      },
+      "scale": {
+        "x": 32.0,
+        "y": 32.0
+      }
+    },
+    "zIndex": 0
+  },
+  {
+    "uID": 12,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "AnhNe.Components.SpriteRenderer",
+        "data": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
+              "textureID": 3,
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.42857143,
+                "y": 0.8333333
+              },
+              {
+                "x": 0.42857143,
+                "y": 0.75
+              },
+              {
+                "x": 0.2857143,
+                "y": 0.75
+              },
+              {
+                "x": 0.2857143,
+                "y": 0.8333333
+              }
+            ]
+          },
+          "uID": 19
+        }
+      }
+    ],
+    "transform": {
+      "position": {
+        "x": 1120.0,
+        "y": 448.0
+      },
+      "scale": {
+        "x": 32.0,
+        "y": 32.0
+      }
+    },
+    "zIndex": 0
   }
 ]

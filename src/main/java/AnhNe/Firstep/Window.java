@@ -164,7 +164,9 @@ public class Window {
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            this.frameBuffer.bind();
+
+            // TODO: fix the frame buffer
+            //this.frameBuffer.bind();
             if (deltaTime >= 0) {
                 DebugDraw.drawLine2D();
                 currentScene.update(deltaTime);

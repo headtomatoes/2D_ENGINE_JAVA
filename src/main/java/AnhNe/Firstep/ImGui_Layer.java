@@ -11,6 +11,7 @@ import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.type.ImBoolean;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -40,6 +41,7 @@ public class ImGui_Layer {
 
         io.setIniFilename("imgui.ini");
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
+        io.setConfigFlags(ImGuiConfigFlags.DockingEnable); // Enable Docking
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
 
@@ -184,6 +186,9 @@ public class ImGui_Layer {
         startFrame(deltaTime);
 
         ImGui.newFrame();
+
+        setupDockSpace();
+
         currentScene.sceneImgui();
         ImGui.showDemoWindow();
         ImGui.render();
@@ -227,4 +232,25 @@ public class ImGui_Layer {
         ImGui.destroyContext();
     }
 
+    private void setupDockSpace(){
+        // set the window flags for the dockspace window (no title bar, no resize, no move, no scrollbar, no menu bar)
+        int windowFlags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
+        ImGui.setNextWindowPos(0.0f, 0.0f, ImGuiCond.Always);                               // set the window position to the top left corner of the window
+        ImGui.setNextWindowSize(Window.getWidth(), Window.getHeight(), ImGuiCond.Always);           // set the window size to the size of the window
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);                                 // set the window rounding to 0 (sharp corners)
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);                               // set the window border size to 0 (no border)
+        windowFlags |= ImGuiWindowFlags.NoTitleBar
+                    | ImGuiWindowFlags.NoCollapse
+                    | ImGuiWindowFlags.NoResize
+                    | ImGuiWindowFlags.NoMove
+                    | ImGuiWindowFlags.NoBringToFrontOnFocus
+                    | ImGuiWindowFlags.NoNavFocus;
+
+        ImGui.begin("DockSpace Demo", new ImBoolean(true), windowFlags);
+        ImGui.popStyleVar(2);
+
+        // DockSpace
+        ImGui.dockSpace(ImGui.getID("DockSpace"));
+        ImGui.end();
+    }
 }
