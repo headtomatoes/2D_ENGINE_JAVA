@@ -71,14 +71,14 @@ public class LevelEditorScene extends Scene {
 
         AssetPool.getTexture("assets/image/areUGays.png");
 
-        for (GameObject gObj : gameObjects) {
-            if(gObj.getComponent(SpriteRenderer.class) != null) {
-                SpriteRenderer sprite = gObj.getComponent(SpriteRenderer.class);
-                if(sprite.getTexture() == null) {
-                    sprite.setTexture(AssetPool.getTexture(sprite.getTexture().getFilePath()));
-                }
-            }
-        }
+//        for (GameObject gObj : gameObjects) {
+//            if(gObj.getComponent(SpriteRenderer.class) != null) {
+//                SpriteRenderer sprite = gObj.getComponent(SpriteRenderer.class);
+//                if(sprite.getTexture() == null) {
+//                    sprite.setTexture(AssetPool.getTexture(sprite.getTexture().getFilePath()));
+//                }
+//            }
+//        }
     }
 
     float angle = 0.0f;

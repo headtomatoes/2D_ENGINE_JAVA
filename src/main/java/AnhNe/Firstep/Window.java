@@ -64,6 +64,14 @@ public class Window {
         return instance;
     }
 
+    public static FrameBuffer getFrameBuffer() {
+        return get().frameBuffer;
+    }
+
+    public static float getTargetAspectRatio() {
+        return 16.0f / 9.0f;
+    }
+
     // Run the window
     public void run() {
         System.out.println("Running window with title: " + title + " and resolution: " + width + "x" + height);
@@ -144,6 +152,7 @@ public class Window {
         this.imGuiLayer = new ImGui_Layer(glfwWindow);
         this.imGuiLayer.initImGui();
         this.frameBuffer = new FrameBuffer(1920, 1080);
+        glViewport(0, 0, 1920, 1080);
         //test
         Window.changeScene(0);
     }
@@ -161,9 +170,9 @@ public class Window {
             glfwPollEvents();
             DebugDraw.beginFrame();
 
+            this.frameBuffer.bind();
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
-
 
             // TODO: fix the frame buffer
             //this.frameBuffer.bind();
@@ -174,7 +183,7 @@ public class Window {
             this.frameBuffer.unbind();
 
             this.imGuiLayer.update(deltaTime, currentScene);
-            glfwSwapBuffers(glfwWindow); // swap the color buffers
+            glfwSwapBuffers(glfwWindow);
 
             timeEnd = (float) glfwGetTime();
             deltaTime = timeEnd - timeBegin;

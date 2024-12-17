@@ -1,6 +1,10 @@
 package AnhNe.Input_Manager;
 
+import AnhNe.Firstep.Camera;
 import AnhNe.Firstep.Window;
+import imgui.ImVec2;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -13,6 +17,8 @@ public class MouseListener {
     private boolean[] mouseButtonPressed = new boolean[9]; // 0 = left, 1 = right, 2 = middle
     private boolean isDragging; // true if dragging
 
+    private Vector2f gameViewportPos = new Vector2f();
+    private Vector2f gameViewportSize = new Vector2f();
     // Constructor is private, so no one can create a new MouseListener
     private MouseListener() {
         this.scrollX = 0.0;
@@ -107,26 +113,44 @@ public class MouseListener {
     }
 
     public static float getOrthoX() {
-        float currentX = getX();
-        currentX = (currentX) / (float) Window.getWidth() * 2.0f - 1.0f;  // NDC = normalized device coordinates
+        float currentX = getX() - get().gameViewportPos.x;
+        currentX = (currentX) / get().gameViewportSize.x * 2.0f - 1.0f;  // NDC = normalized device coordinates
 
         // last 1 for the w component to keep the integrity of the multiplication with the matrix
         Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
-        tmp.mul(Window.getScene().camera().getInverseProjectionMatrix()).mul(Window.getScene().camera().getInverseViewMatrix());
+
+        Camera camera = Window.getScene().camera();
+        Matrix4f viewProjection = new Matrix4f();
+        camera.getInverseViewMatrix().mul(camera.getInverseProjectionMatrix(), viewProjection);
+        tmp.mul(viewProjection);
         currentX = tmp.x;
         System.out.println(currentX);
+
         return currentX;
     }
 
     public static float getOrthoY() {
-        float currentY = Window.getHeight() - getY(); // because the y-axis is flipped in the window
-        currentY = (currentY) / (float)Window.getHeight() * 2.0f - 1.0f;  // NDC = normalized device coordinates
+        float currentY = getY() - get().gameViewportPos.y; // flip the y axis because the y axis is flipped in OpenGL
+        currentY = -(currentY / get().gameViewportSize.y * 2.0f - 1.0f);  // NDC = normalized device coordinates
 
         // last 1 for the w component to keep the integrity of the multiplication with the matrix
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
-        tmp.mul(Window.getScene().camera().getInverseProjectionMatrix()).mul(Window.getScene().camera().getInverseViewMatrix());
+
+        Camera camera = Window.getScene().camera();
+        Matrix4f viewProjection = new Matrix4f();
+        camera.getInverseViewMatrix().mul(camera.getInverseProjectionMatrix(), viewProjection);
+        tmp.mul(viewProjection);
         currentY = tmp.y;
         System.out.println(currentY);
         return currentY;
     }
+
+    public static void setGameViewportSize(Vector2f gameViewportSize) {
+        get().gameViewportSize.set(gameViewportSize);
+    }
+
+    public static void setGameViewportPos(Vector2f gameViewportPos) {
+        get().gameViewportPos.set(gameViewportPos);
+    }
+
 }

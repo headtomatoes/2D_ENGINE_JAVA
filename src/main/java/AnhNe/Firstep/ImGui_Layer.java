@@ -1,5 +1,6 @@
 package AnhNe.Firstep;
 
+import AnhNe.Editor.GameViewWindow;
 import AnhNe.Input_Manager.KeyListener;
 import AnhNe.Input_Manager.MouseListener;
 import AnhNe.Scene_Manager.Scene;
@@ -126,7 +127,7 @@ public class ImGui_Layer {
                 ImGui.setWindowFocus(null);
             }
 
-            if(!io.getWantCaptureMouse()){
+            if(!io.getWantCaptureMouse() || !GameViewWindow.getWantCaptureMouse()){
                 // forward mouse button event to the MouseListener(my engine's class) because in OpenGL, just one glfw(same type) callback can be set once at a time
                 MouseListener.mouseButtonCallBack(w, button, action, mods);
             }
@@ -191,6 +192,8 @@ public class ImGui_Layer {
 
         currentScene.sceneImgui();
         ImGui.showDemoWindow();
+        //add game view window
+        GameViewWindow.imgui();
         ImGui.render();
 
         endFrame();

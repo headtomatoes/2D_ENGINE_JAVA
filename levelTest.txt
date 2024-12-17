@@ -17,26 +17,26 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
+              "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
                 "x": 0.85714287,
-                "y": 0.33333334
+                "y": 0.9166667
               },
               {
                 "x": 0.85714287,
-                "y": 0.25
+                "y": 0.8333333
               },
               {
                 "x": 0.71428573,
-                "y": 0.25
+                "y": 0.8333333
               },
               {
                 "x": 0.71428573,
-                "y": 0.33333334
+                "y": 0.9166667
               }
             ]
           },
@@ -46,8 +46,8 @@
     ],
     "transform": {
       "position": {
-        "x": 448.0,
-        "y": 256.0
+        "x": 704.0,
+        "y": -64.0
       },
       "scale": {
         "x": 32.0,
@@ -74,37 +74,37 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
+              "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
-                "x": 1.0,
-                "y": 0.33333334
+                "x": 0.14285715,
+                "y": 0.8333333
               },
               {
-                "x": 1.0,
-                "y": 0.25
+                "x": 0.14285715,
+                "y": 0.75
               },
               {
-                "x": 0.85714287,
-                "y": 0.25
+                "x": 0.0,
+                "y": 0.75
               },
               {
-                "x": 0.85714287,
-                "y": 0.33333334
+                "x": 0.0,
+                "y": 0.8333333
               }
             ]
           },
-          "uID": 3
+          "uID": 5
         }
       }
     ],
     "transform": {
       "position": {
-        "x": 480.0,
-        "y": 256.0
+        "x": 64.0,
+        "y": -64.0
       },
       "scale": {
         "x": 32.0,
@@ -131,37 +131,37 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
+              "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
-                "x": 1.0,
-                "y": 0.33333334
+                "x": 0.71428573,
+                "y": 0.9166667
               },
               {
-                "x": 1.0,
-                "y": 0.25
+                "x": 0.71428573,
+                "y": 0.8333333
               },
               {
-                "x": 0.85714287,
-                "y": 0.25
+                "x": 0.5714286,
+                "y": 0.8333333
               },
               {
-                "x": 0.85714287,
-                "y": 0.33333334
+                "x": 0.5714286,
+                "y": 0.9166667
               }
             ]
           },
-          "uID": 4
+          "uID": 8
         }
       }
     ],
     "transform": {
       "position": {
-        "x": 480.0,
-        "y": 288.0
+        "x": 160.0,
+        "y": 544.0
       },
       "scale": {
         "x": 32.0,
@@ -188,37 +188,37 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
+              "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
-                "x": 1.0,
-                "y": 0.33333334
+                "x": 0.2857143,
+                "y": 0.9166667
               },
               {
-                "x": 1.0,
-                "y": 0.25
+                "x": 0.2857143,
+                "y": 0.8333333
               },
               {
-                "x": 0.85714287,
-                "y": 0.25
+                "x": 0.14285715,
+                "y": 0.8333333
               },
               {
-                "x": 0.85714287,
-                "y": 0.33333334
+                "x": 0.14285715,
+                "y": 0.9166667
               }
             ]
           },
-          "uID": 5
+          "uID": 11
         }
       }
     ],
     "transform": {
       "position": {
-        "x": 480.0,
-        "y": 320.0
+        "x": 1248.0,
+        "y": 544.0
       },
       "scale": {
         "x": 32.0,
@@ -245,37 +245,37 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
+              "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
-                "x": 0.5714286,
-                "y": 0.5833333
+                "x": 0.71428573,
+                "y": 0.9166667
+              },
+              {
+                "x": 0.71428573,
+                "y": 0.8333333
               },
               {
                 "x": 0.5714286,
-                "y": 0.5
+                "y": 0.8333333
               },
               {
-                "x": 0.42857143,
-                "y": 0.5
-              },
-              {
-                "x": 0.42857143,
-                "y": 0.5833333
+                "x": 0.5714286,
+                "y": 0.9166667
               }
             ]
           },
-          "uID": 6
+          "uID": 14
         }
       }
     ],
     "transform": {
       "position": {
-        "x": 448.0,
-        "y": 320.0
+        "x": 1248.0,
+        "y": 512.0
       },
       "scale": {
         "x": 32.0,
@@ -302,315 +302,30 @@
             "height": 16.0,
             "texture": {
               "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": -1,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 0.5714286,
-                "y": 0.5833333
-              },
-              {
-                "x": 0.5714286,
-                "y": 0.5
-              },
-              {
-                "x": 0.42857143,
-                "y": 0.5
-              },
-              {
-                "x": 0.42857143,
-                "y": 0.5833333
-              }
-            ]
-          },
-          "uID": 7
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 448.0,
-        "y": 288.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 7,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": 2,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 0.71428573,
-                "y": 0.25
-              },
-              {
-                "x": 0.71428573,
-                "y": 0.16666667
-              },
-              {
-                "x": 0.5714286,
-                "y": 0.16666667
-              },
-              {
-                "x": 0.5714286,
-                "y": 0.25
-              }
-            ]
-          },
-          "uID": 10
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 448.0,
-        "y": 160.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 8,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": 2,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 0.71428573,
-                "y": 0.25
-              },
-              {
-                "x": 0.71428573,
-                "y": 0.16666667
-              },
-              {
-                "x": 0.5714286,
-                "y": 0.16666667
-              },
-              {
-                "x": 0.5714286,
-                "y": 0.25
-              }
-            ]
-          },
-          "uID": 11
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 480.0,
-        "y": 160.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 9,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": 2,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 1.0,
-                "y": 0.33333334
-              },
-              {
-                "x": 1.0,
-                "y": 0.25
-              },
-              {
-                "x": 0.85714287,
-                "y": 0.25
-              },
-              {
-                "x": 0.85714287,
-                "y": 0.33333334
-              }
-            ]
-          },
-          "uID": 12
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 512.0,
-        "y": 160.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 10,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": 2,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 1.0,
-                "y": 0.33333334
-              },
-              {
-                "x": 1.0,
-                "y": 0.25
-              },
-              {
-                "x": 0.85714287,
-                "y": 0.25
-              },
-              {
-                "x": 0.85714287,
-                "y": 0.33333334
-              }
-            ]
-          },
-          "uID": 13
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 544.0,
-        "y": 160.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 11,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
               "textureID": 3,
               "width": 112,
               "height": 192
             },
             "texCoords": [
               {
-                "x": 0.2857143,
-                "y": 0.5833333
+                "x": 1.0,
+                "y": 0.9166667
               },
               {
-                "x": 0.2857143,
-                "y": 0.5
+                "x": 1.0,
+                "y": 0.8333333
               },
               {
-                "x": 0.14285715,
-                "y": 0.5
+                "x": 0.85714287,
+                "y": 0.8333333
               },
               {
-                "x": 0.14285715,
-                "y": 0.5833333
+                "x": 0.85714287,
+                "y": 0.9166667
               }
             ]
           },
-          "uID": 16
+          "uID": 17
         }
       }
     ],
@@ -618,63 +333,6 @@
       "position": {
         "x": 352.0,
         "y": 64.0
-      },
-      "scale": {
-        "x": 32.0,
-        "y": 32.0
-      }
-    },
-    "zIndex": 0
-  },
-  {
-    "uID": 12,
-    "name": "Sprite_Object_Gen",
-    "components": [
-      {
-        "type": "AnhNe.Components.SpriteRenderer",
-        "data": {
-          "color": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0,
-            "w": 1.0
-          },
-          "sprite": {
-            "width": 16.0,
-            "height": 16.0,
-            "texture": {
-              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
-              "textureID": 3,
-              "width": 112,
-              "height": 192
-            },
-            "texCoords": [
-              {
-                "x": 0.42857143,
-                "y": 0.8333333
-              },
-              {
-                "x": 0.42857143,
-                "y": 0.75
-              },
-              {
-                "x": 0.2857143,
-                "y": 0.75
-              },
-              {
-                "x": 0.2857143,
-                "y": 0.8333333
-              }
-            ]
-          },
-          "uID": 19
-        }
-      }
-    ],
-    "transform": {
-      "position": {
-        "x": 1120.0,
-        "y": 448.0
       },
       "scale": {
         "x": 32.0,
