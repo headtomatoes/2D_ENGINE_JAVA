@@ -1,4 +1,4 @@
-package Renderer;
+package AnhNe.Renderer;
 
 import AnhNe.Firstep.Window;
 import AnhNe.Utility.AssetPool;

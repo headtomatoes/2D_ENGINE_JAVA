@@ -1,7 +1,7 @@
 package AnhNe.Components;
 
 import AnhNe.Firstep.Transform;
-import Renderer.Texture;
+import AnhNe.Renderer.Texture;
 import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;

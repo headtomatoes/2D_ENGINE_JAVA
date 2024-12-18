@@ -15,4 +15,8 @@ public class LevelScene extends Scene {
     public void update(float deltaTime) {
 
     }
+
+    @Override
+    public void render() {
+    }
 }

@@ -5,7 +5,7 @@ import AnhNe.Components.ComponentsDeserializer;
 import AnhNe.Firstep.Camera;
 import AnhNe.Firstep.GameObject;
 import AnhNe.Firstep.GameObjectDeserializer;
-import Renderer.Renderer;
+import AnhNe.Renderer.Renderer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Scene {
 
@@ -31,6 +32,8 @@ public abstract class Scene {
     }
 
     public abstract void update(float deltaTime);
+
+    public abstract void render();
 
     public void init() {}
 
@@ -56,14 +59,6 @@ public abstract class Scene {
         return this.camera;
     }
 
-    public void sceneImgui() {
-        if(activeGameObject != null) {
-            ImGui.begin("Inspector");
-            activeGameObject.imgui();           // the focus/target game object is inspected by imgui
-            ImGui.end();
-        }
-        imgui();
-    }
     public void imgui() {
 
     }
@@ -74,6 +69,7 @@ public abstract class Scene {
                 .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
                 .create();
     }
+
     public void saveExit(){
         try (FileWriter writer = new FileWriter("levelTest.txt")) {
             Gson gson = createGson();
@@ -119,5 +115,11 @@ public abstract class Scene {
             e.printStackTrace();
             this.levelLoaded = false;
         }
+    }
+
+    public GameObject getGameObject(int gameObjectId) {
+        Optional<GameObject> result = this.gameObjects.stream()
+                .filter(gameObject -> gameObject.getUID() == gameObjectId).findFirst();
+        return result.orElse(null);
     }
 }

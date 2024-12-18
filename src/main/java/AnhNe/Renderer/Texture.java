@@ -1,14 +1,11 @@
-package Renderer;
+package AnhNe.Renderer;
 
 import org.lwjgl.BufferUtils;
 
-import java.io.File;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {

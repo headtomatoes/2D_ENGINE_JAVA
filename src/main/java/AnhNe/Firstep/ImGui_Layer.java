@@ -1,8 +1,10 @@
 package AnhNe.Firstep;
 
 import AnhNe.Editor.GameViewWindow;
+import AnhNe.Editor.PropertiesWindow;
 import AnhNe.Input_Manager.KeyListener;
 import AnhNe.Input_Manager.MouseListener;
+import AnhNe.Renderer.PickingTexture;
 import AnhNe.Scene_Manager.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
@@ -25,9 +27,13 @@ public class ImGui_Layer {
     // LWJGL3 renderer (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
     private String glslVersion = "#version 460 core"; // We can initialize our renderer with different versions of the GLSL
+    private GameViewWindow gameViewWindow;
+    private PropertiesWindow propertiesWindow;
 
-    public ImGui_Layer(long glwfWindow) {
+    public ImGui_Layer(long glwfWindow, PickingTexture pickingTexture) {
         this.glwfWindow = glwfWindow;
+        this.gameViewWindow = new GameViewWindow();
+        this.propertiesWindow = new PropertiesWindow(pickingTexture);
     }
 
     //Initialize Dear ImGui.
@@ -127,7 +133,7 @@ public class ImGui_Layer {
                 ImGui.setWindowFocus(null);
             }
 
-            if(!io.getWantCaptureMouse() || !GameViewWindow.getWantCaptureMouse()){
+            if(!io.getWantCaptureMouse() || !gameViewWindow.getWantCaptureMouse()){
                 // forward mouse button event to the MouseListener(my engine's class) because in OpenGL, just one glfw(same type) callback can be set once at a time
                 MouseListener.mouseButtonCallBack(w, button, action, mods);
             }
@@ -190,10 +196,13 @@ public class ImGui_Layer {
 
         setupDockSpace();
 
-        currentScene.sceneImgui();
+        currentScene.imgui();
         ImGui.showDemoWindow();
         //add game view window
-        GameViewWindow.imgui();
+        gameViewWindow.imgui();
+        propertiesWindow.update(deltaTime , currentScene);
+        propertiesWindow.imgui();
+
         ImGui.render();
 
         endFrame();

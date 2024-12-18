@@ -1,10 +1,8 @@
-package Renderer;
+package AnhNe.Renderer;
 
 import AnhNe.Components.SpriteRenderer;
 import AnhNe.Firstep.Window;
-import AnhNe.Utility.AssetPool;
 
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -29,11 +27,13 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
     private final int TEX_ID_SIZE = 1;
+    private final int ENTITY_ID_SIZE = 1;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
     private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
+    private final int ENTITY_ID_OFFSET = TEX_ID_OFFSET + TEX_ID_SIZE * Float.BYTES;
     // for add more data, we can add more offset like COLOR_OFFSET + COLOR_SIZE * Float.BYTES
 
     private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + TEX_COORDS_SIZE + TEX_ID_SIZE; // 2 + 4 + 2 + 1 = 9
@@ -48,14 +48,13 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private List<Texture> textures; // list of textures currently is being used in the batch
     private int VAO_ID, VBO_ID;
     private int maxBatchSize;
-    private Shader shader;
 
     //blending variables
     private int zIndex;
 
     public RenderBatch(int maxBatchSize, int zIndex) {
         this.zIndex = zIndex;
-        shader = AssetPool.getShader("assets/shaders/default.glsl");
+        //shader = AssetPool.getShader("assets/shaders/default.glsl");
         this.spritesArray = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
 
@@ -103,6 +102,10 @@ public class RenderBatch implements Comparable<RenderBatch> {
             //Enable the texture ID attribute
         glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
+
+            //Enable the entity ID attribute
+        glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, ENTITY_ID_OFFSET);
+        glEnableVertexAttribArray(4);
     }
 
     public void addSprite(SpriteRenderer sprite) {
@@ -152,7 +155,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
         glBufferSubData(GL_ARRAY_BUFFER, 0, verticesArray);
 
         //Use the shader
-        shader.use();
+        Shader shader = Renderer.getBoundShader();
         shader.uploadMat4f("uProjection", Window.getScene().camera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().camera().getViewMatrix());
 
@@ -228,8 +231,12 @@ public class RenderBatch implements Comparable<RenderBatch> {
             //load texture coordinates
             verticesArray[offset + 6] = texCoords[i].x;
             verticesArray[offset + 7] = texCoords[i].y;
+
             //load texture ID
             verticesArray[offset + 8] = texID;
+
+            //load entity ID
+            verticesArray[offset + 9] = sprite.gameObject.getUID() + 1;
 
             offset += VERTEX_SIZE;
         }

@@ -1,8 +1,8 @@
 package AnhNe.Utility;
 
 import AnhNe.Components.SpriteSheet;
-import Renderer.Shader;
-import Renderer.Texture;
+import AnhNe.Renderer.Shader;
+import AnhNe.Renderer.Texture;
 
 import java.io.File;
 import java.util.HashMap;

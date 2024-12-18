@@ -1,4 +1,4 @@
-package Renderer;
+package AnhNe.Renderer;
 
 import org.joml.*;
 import org.lwjgl.BufferUtils;

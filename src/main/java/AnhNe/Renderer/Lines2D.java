@@ -1,4 +1,4 @@
-package Renderer;
+package AnhNe.Renderer;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;

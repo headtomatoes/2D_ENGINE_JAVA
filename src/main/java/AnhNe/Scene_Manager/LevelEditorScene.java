@@ -3,15 +3,11 @@ package AnhNe.Scene_Manager;
 
 import AnhNe.Components.*;
 import AnhNe.Firstep.*;
-import AnhNe.Input_Manager.MouseListener;
 import AnhNe.Utility.AssetPool;
 
-import Renderer.DebugDraw;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class LevelEditorScene extends Scene {
     private GameObject obj1 = null;
@@ -81,7 +77,6 @@ public class LevelEditorScene extends Scene {
 //        }
     }
 
-    float angle = 0.0f;
     @Override
     public void update(float deltaTime) {
         // Update the level editor stuff (grid lines, mouse controls) currently
@@ -92,6 +87,12 @@ public class LevelEditorScene extends Scene {
             gameObject.update(deltaTime);
         }
 
+        // Render the game objects
+        this.renderer.render();
+    }
+
+    @Override
+    public void render() {
         // Render the game objects
         this.renderer.render();
     }

@@ -1,6 +1,6 @@
 package AnhNe.Components;
 
-import Renderer.Texture;
+import AnhNe.Renderer.Texture;
 import org.joml.Vector2f;
 
 import java.util.ArrayList;

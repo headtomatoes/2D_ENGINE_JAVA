@@ -2,12 +2,9 @@ package AnhNe.Components;
 
 import AnhNe.Firstep.Window;
 import AnhNe.Utility.Settings;
-import Renderer.DebugDraw;
+import AnhNe.Renderer.DebugDraw;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-
-import java.awt.*;
-import java.util.Vector;
 
 public class GridlLines extends Component{
 

@@ -2,7 +2,6 @@ package AnhNe.Input_Manager;
 
 import AnhNe.Firstep.Camera;
 import AnhNe.Firstep.Window;
-import imgui.ImVec2;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -67,40 +66,12 @@ public class MouseListener {
         get().scrollY = yOffset;
     }
 
-    // last frame's position
-    public static void endFrame() {
-        get().scrollX = 0;
-        get().scrollY = 0;
-        get().lastX = get().xPos;
-        get().lastY = get().yPos;
-    }
-
     public static float getX() {
         return (float) get().xPos;
     }
 
     public static float getY() {
         return (float) get().yPos;
-    }
-
-    public static float getDx() {
-        return (float) (get().lastX - get().xPos);
-    }
-
-    public static float getDy() {
-        return (float) (get().lastY - get().yPos);
-    }
-
-    public static float getScrollX() {
-        return (float) get().scrollX;
-    }
-
-    public static float getScrollY() {
-        return (float) get().scrollY;
-    }
-
-    public static boolean isDragging() {
-        return get().isDragging;
     }
 
     // Check if a mouse button is pressed
@@ -153,4 +124,15 @@ public class MouseListener {
         get().gameViewportPos.set(gameViewportPos);
     }
 
+    public static float getScreenX() {
+        float currentX = getX() - get().gameViewportPos.x;
+        currentX = (currentX) / get().gameViewportSize.x * 1980.0f;  // NDC = normalized device coordinates
+        return currentX;
+    }
+
+    public static float getScreenY() {
+        float currentY = getY() - get().gameViewportPos.y;
+        currentY = 1080.0f - ((currentY / get().gameViewportSize.y) * 1080.0f);  // NDC = normalized device coordinates
+        return currentY;
+    }
 }

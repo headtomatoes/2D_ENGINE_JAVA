@@ -2,11 +2,11 @@ package AnhNe.Firstep;
 
 import AnhNe.Input_Manager.KeyListener;
 import AnhNe.Input_Manager.MouseListener;
+import AnhNe.Renderer.*;
 import AnhNe.Scene_Manager.LevelEditorScene;
 import AnhNe.Scene_Manager.LevelScene;
 import AnhNe.Scene_Manager.Scene;
-import Renderer.DebugDraw;
-import Renderer.FrameBuffer;
+import AnhNe.Utility.AssetPool;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -24,6 +24,7 @@ public class Window {
                                 // just the way in C, we have a pointer to the window
     private FrameBuffer frameBuffer;
     private static Scene currentScene;
+    private PickingTexture pickingTexture;
 
     // Singleton pattern: only one instance of Window can be created
     private static Window instance = null;
@@ -149,9 +150,10 @@ public class Window {
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         // Initialize ImGui
-        this.imGuiLayer = new ImGui_Layer(glfwWindow);
-        this.imGuiLayer.initImGui();
         this.frameBuffer = new FrameBuffer(1920, 1080);
+        this.pickingTexture = new PickingTexture(1920, 1080); // mimic the game world
+        this.imGuiLayer = new ImGui_Layer(glfwWindow ,pickingTexture);
+        this.imGuiLayer.initImGui();
         glViewport(0, 0, 1920, 1080);
         //test
         Window.changeScene(0);
@@ -165,9 +167,34 @@ public class Window {
         float timeEnd;
         float deltaTime = -1.0f;
 
+        Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
+        Shader pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
+
         while(!glfwWindowShouldClose(glfwWindow)) {
             // Poll for window events.
             glfwPollEvents();
+
+            // Render pass 1: render the picking texture
+            glDisable(GL_BLEND);
+            this.pickingTexture.enableWriting();
+
+            glViewport(0, 0, 1920, 1080);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            Renderer.bindShader(pickingShader);
+            currentScene.render();
+
+//            if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+//                int x = (int)MouseListener.getScreenX();
+//                int y = (int)MouseListener.getScreenY();
+//                System.out.println(pickingTexture.readPixel(x, y));
+//            }
+
+            pickingTexture.disableWriting();
+            glEnable(GL_BLEND);
+            // Render pass 2: render the actual game
+
+
             DebugDraw.beginFrame();
 
             this.frameBuffer.bind();
@@ -178,7 +205,9 @@ public class Window {
             //this.frameBuffer.bind();
             if (deltaTime >= 0) {
                 DebugDraw.drawLine2D();
+                Renderer.bindShader(defaultShader);
                 currentScene.update(deltaTime);
+                currentScene.render();
             }
             this.frameBuffer.unbind();
 
