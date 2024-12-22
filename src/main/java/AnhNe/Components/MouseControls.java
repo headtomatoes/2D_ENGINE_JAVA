@@ -11,7 +11,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MouseControls extends Component {
     private GameObject holdingObject = null;
-    private Vector2f offset = new Vector2f(16, 16); // Centralize offset
 
     public void pickUpObject(GameObject gameObject) {
         this.holdingObject = gameObject;

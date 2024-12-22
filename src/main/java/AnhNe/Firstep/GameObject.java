@@ -10,6 +10,7 @@ public class GameObject {
 
     private static int GLOBAL_ID_COUNTER = 0; // static variable to keep track of the number of components in the game
     public int uID = -1; // unique id for each component
+
     private String name;
     private List<Component> components;
     public Transform transform;

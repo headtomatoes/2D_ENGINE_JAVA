@@ -36,7 +36,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private final int ENTITY_ID_OFFSET = TEX_ID_OFFSET + TEX_ID_SIZE * Float.BYTES;
     // for add more data, we can add more offset like COLOR_OFFSET + COLOR_SIZE * Float.BYTES
 
-    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + TEX_COORDS_SIZE + TEX_ID_SIZE; // 2 + 4 + 2 + 1 = 9
+    private final int VERTEX_SIZE = POS_SIZE + COLOR_SIZE + TEX_COORDS_SIZE + TEX_ID_SIZE + ENTITY_ID_SIZE; // 2 + 4 + 2 + 1 = 9
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private SpriteRenderer[] spritesArray;
@@ -150,9 +150,6 @@ public class RenderBatch implements Comparable<RenderBatch> {
             glBindBuffer(GL_ARRAY_BUFFER, VBO_ID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, verticesArray);
         }
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_ID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, verticesArray);
 
         //Use the shader
         Shader shader = Renderer.getBoundShader();
@@ -282,7 +279,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     }
 
     public int getZIndex() {
-        return zIndex;
+        return this.zIndex;
     }
 
     @Override

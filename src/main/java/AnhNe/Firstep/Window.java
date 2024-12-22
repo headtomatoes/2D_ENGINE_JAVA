@@ -7,8 +7,11 @@ import AnhNe.Scene_Manager.LevelEditorScene;
 import AnhNe.Scene_Manager.LevelScene;
 import AnhNe.Scene_Manager.Scene;
 import AnhNe.Utility.AssetPool;
+import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+
+import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -16,7 +19,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 // Mostly come from getting-started-with-lwjgl3 tutorial
 public class Window {
-    private ImGui_Layer imGuiLayer = null;
+    private ImGui_Layer imGuiLayer;
     private int width, height;
     private String title;
     public float r, g, b, a;
@@ -27,7 +30,7 @@ public class Window {
     private PickingTexture pickingTexture;
 
     // Singleton pattern: only one instance of Window can be created
-    private static Window instance = null;
+    private static Window window = null;
 
     // Constructor is private, so no one can create a new Window
     private Window() {
@@ -59,10 +62,10 @@ public class Window {
     }
     // Return the only instance of Window
     public static Window get() {
-        if (instance == null) {
-            instance = new Window();
+        if (Window.window == null) {
+            Window.window = new Window();
         }
-        return instance;
+        return Window.window;
     }
 
     public static FrameBuffer getFrameBuffer() {
@@ -75,8 +78,10 @@ public class Window {
 
     // Run the window
     public void run() {
+        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
         System.out.println("Running window with title: " + title + " and resolution: " + width + "x" + height);
         System.out.println("Press ESC to close the window.");
+
         init();
         loop();
         // Free the memory
@@ -84,7 +89,7 @@ public class Window {
         glfwDestroyWindow(glfwWindow);
         // Terminate GLFW and free the error callback
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
     private void glfwFreeCallbacks(long glfwWindow) {
@@ -93,17 +98,16 @@ public class Window {
 
     // Initialize the window
     private void init() {
-        System.out.println("Initializing window...");
         // set up error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
         // initialize GLFW
-        if (!org.lwjgl.glfw.GLFW.glfwInit()) {
+        if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
         // configure GLFW
-        org.lwjgl.glfw.GLFW.glfwDefaultWindowHints();
+        glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);  // window is not visible FOR waiting for window to be created
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // window is resizable
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE); // maximize window
@@ -124,8 +128,8 @@ public class Window {
             Window.setHeight(newHeight);
         });
 
-        // set up keyboard callback
-        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallBack);
+//        // set up keyboard callback
+//        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallBack);
 
         // make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
@@ -152,13 +156,13 @@ public class Window {
         // Initialize ImGui
         this.frameBuffer = new FrameBuffer(1920, 1080);
         this.pickingTexture = new PickingTexture(1920, 1080); // mimic the game world
+        glViewport(0, 0, 1920, 1080);
+
         this.imGuiLayer = new ImGui_Layer(glfwWindow ,pickingTexture);
         this.imGuiLayer.initImGui();
-        glViewport(0, 0, 1920, 1080);
         //test
         Window.changeScene(0);
     }
-
 
     // Main loop
     private void loop() {
@@ -176,25 +180,19 @@ public class Window {
 
             // Render pass 1: render the picking texture
             glDisable(GL_BLEND);
-            this.pickingTexture.enableWriting();
+            pickingTexture.enableWriting();
 
             glViewport(0, 0, 1920, 1080);
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
             Renderer.bindShader(pickingShader);
             currentScene.render();
 
-//            if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-//                int x = (int)MouseListener.getScreenX();
-//                int y = (int)MouseListener.getScreenY();
-//                System.out.println(pickingTexture.readPixel(x, y));
-//            }
-
             pickingTexture.disableWriting();
             glEnable(GL_BLEND);
+
             // Render pass 2: render the actual game
-
-
             DebugDraw.beginFrame();
 
             this.frameBuffer.bind();
@@ -223,7 +221,7 @@ public class Window {
     }
 
     public static Scene getScene() {
-        return currentScene;
+        return get().currentScene;
     }
 
     public static int getWidth() {

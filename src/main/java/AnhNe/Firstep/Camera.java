@@ -9,7 +9,7 @@ public class Camera {
     //x, y, z, w
     private Matrix4f projectionMatrix, viewMatrix , inverseProjection, inverseView;
     public Vector2f position;
-    private Vector2f projectionSize = new Vector2f(1280.0f, 672.0f);
+    private Vector2f projectionSize = new Vector2f(32.0f * 40.0f, 32.0f * 21.0f);
 
 
     // Constructor creates a camera with a given position and initializes the projection and view matrix

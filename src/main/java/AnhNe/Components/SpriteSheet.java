@@ -55,9 +55,7 @@ public class SpriteSheet {
     }
 
     public Sprite getSprite(int index) {
-
         return sprites.get(index);
-
     }
 
     public int size() {

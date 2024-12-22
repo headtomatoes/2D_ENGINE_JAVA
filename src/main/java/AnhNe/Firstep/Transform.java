@@ -42,6 +42,6 @@ public class Transform {
             return false;
         }
         Transform transform = (Transform) obj;
-        return transform.position.equals(this.position) && this.scale.equals(this.scale);
+        return transform.position.equals(this.position) && transform.scale.equals(this.scale);
     }
 }

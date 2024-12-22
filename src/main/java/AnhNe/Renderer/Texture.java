@@ -31,7 +31,7 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     }
 
     public void init(String filePath){
@@ -57,25 +57,26 @@ public class Texture {
         // Load the image
         IntBuffer width = BufferUtils.createIntBuffer(1);       // width of the image
         IntBuffer height = BufferUtils.createIntBuffer(1);      // height of the image
-        IntBuffer nrChannels = BufferUtils.createIntBuffer(1);  // number of color channels in the image (RGB) or (RGBA) 3 or 4
+        IntBuffer channels = BufferUtils.createIntBuffer(1);  // number of color channels in the image (RGB) or (RGBA) 3 or 4
 
         // Flip the image vertically
         stbi_set_flip_vertically_on_load(true);
         // stbi library function to load the image
-        ByteBuffer image = stbi_load(filePath, width, height, nrChannels, 0);
+        ByteBuffer image = stbi_load(filePath, width, height, channels, 0);
 
         // Check if the image is loaded
         if (image != null) {
             this.width = width.get(0);
             this.height = height.get(0);
-            if(nrChannels.get(0) == 3) {
+
+            if(channels.get(0) == 3) {
                 // RGB image
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-            } else if(nrChannels.get(0) == 4) {
+            } else if(channels.get(0) == 4) {
                 // RGBA image
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
             } else {
-                assert false : "Error: (Texture) Unknown number of channels '" + nrChannels.get(0) + "'";
+                assert false : "Error: (Texture) Unknown number of channels '" + channels.get(0) + "'";
             }
         }else {
             assert false : "Error: (Texture) Failed to load image '" + filePath + "'";
@@ -120,7 +121,7 @@ public class Texture {
             return false;
         }
         Texture objTex = (Texture) obj;
-        return objTex.getWidth() == this.getWidth() && objTex.getHeight() == this.getHeight() && objTex.getID() == this.getID() && objTex.getFilePath().equals(this.getFilePath());
+        return objTex.getWidth() == this.width && objTex.getHeight() == this.height && objTex.getID() == this.textureID && objTex.getFilePath().equals(this.filePath);
     }
 
 

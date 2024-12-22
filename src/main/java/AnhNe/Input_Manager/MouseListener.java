@@ -74,6 +74,13 @@ public class MouseListener {
         return (float) get().yPos;
     }
 
+    public static void endFrame() {
+        get().scrollX = 0;
+        get().scrollY = 0;
+        get().lastX = get().xPos;
+        get().lastY = get().yPos;
+    }
+
     // Check if a mouse button is pressed
     public static boolean mouseButtonDown(int button) {
         if (button < get().mouseButtonPressed.length) {
@@ -95,14 +102,13 @@ public class MouseListener {
         camera.getInverseViewMatrix().mul(camera.getInverseProjectionMatrix(), viewProjection);
         tmp.mul(viewProjection);
         currentX = tmp.x;
-        System.out.println(currentX);
 
         return currentX;
     }
 
     public static float getOrthoY() {
         float currentY = getY() - get().gameViewportPos.y; // flip the y axis because the y axis is flipped in OpenGL
-        currentY = -(currentY / get().gameViewportSize.y * 2.0f - 1.0f);  // NDC = normalized device coordinates
+        currentY = -((currentY / get().gameViewportSize.y) * 2.0f - 1.0f);  // NDC = normalized device coordinates
 
         // last 1 for the w component to keep the integrity of the multiplication with the matrix
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
@@ -112,7 +118,6 @@ public class MouseListener {
         camera.getInverseViewMatrix().mul(camera.getInverseProjectionMatrix(), viewProjection);
         tmp.mul(viewProjection);
         currentY = tmp.y;
-        System.out.println(currentY);
         return currentY;
     }
 
@@ -126,7 +131,7 @@ public class MouseListener {
 
     public static float getScreenX() {
         float currentX = getX() - get().gameViewportPos.x;
-        currentX = (currentX) / get().gameViewportSize.x * 1980.0f;  // NDC = normalized device coordinates
+        currentX = (currentX / get().gameViewportSize.x) * 1920.0f;  // NDC = normalized device coordinates
         return currentX;
     }
 
@@ -134,5 +139,13 @@ public class MouseListener {
         float currentY = getY() - get().gameViewportPos.y;
         currentY = 1080.0f - ((currentY / get().gameViewportSize.y) * 1080.0f);  // NDC = normalized device coordinates
         return currentY;
+    }
+
+    public static float getDx() {
+        return (float)(get().lastX - get().xPos);
+    }
+
+    public static float getDy() {
+        return (float)(get().lastY - get().yPos);
     }
 }

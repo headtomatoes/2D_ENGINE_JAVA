@@ -53,10 +53,10 @@ public class ComponentsDeserializer implements JsonDeserializer<Component>, Json
     }
 
     @Override
-    public JsonElement serialize(Component src, Type typeOfSrc, com.google.gson.JsonSerializationContext Context) {
+    public JsonElement serialize(Component src, Type typeOfSrc, com.google.gson.JsonSerializationContext context) {
         JsonObject result = new JsonObject();
         result.add("type", new JsonPrimitive(src.getClass().getCanonicalName()));
-        result.add("data", Context.serialize(src , src.getClass()));
+        result.add("data", context.serialize(src , src.getClass()));
         return result;
     }
 }

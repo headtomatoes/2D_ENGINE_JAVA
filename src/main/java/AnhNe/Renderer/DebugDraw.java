@@ -55,7 +55,7 @@ public class DebugDraw {
 
         // Clear the dead lines
         for (int i = 0; i < lines.size(); i++){
-            if (lines.get(i).beginFrame() <= 0){
+            if (lines.get(i).beginFrame() < 0){
                 lines.remove(i);
                 i--;
             }
@@ -99,7 +99,7 @@ public class DebugDraw {
         glEnableVertexAttribArray(1);
 
         // Draw the batch ( Brezenham's line algorithm )
-        glDrawArrays(GL_LINES, 0, lines.size() * 2);
+        glDrawArrays(GL_LINES, 0, lines.size() * 6 * 2);
 
         // Disable the location
         glDisableVertexAttribArray(0);
@@ -126,7 +126,7 @@ public class DebugDraw {
         if (lines.size() >= MAX_LINES){
             return;
         }
-        lines.add(new Lines2D(from, to, color, lifetime));
+        DebugDraw.lines.add(new Lines2D(from, to, color, lifetime));
     }
 
     // ========================================================
@@ -138,7 +138,7 @@ public class DebugDraw {
     }
 
     public static void addBox2D(Vector2f center, Vector2f dimension, float rotation,Vector3f color){
-        addBox2D(center, dimension,rotation, color, 1);
+        addBox2D(center, dimension, rotation, color, 1);
     }
     public static void addBox2D(Vector2f center, Vector2f dimension, float rotation, Vector3f color, int lifetime) {
         // Calculate the box's bounding corners

@@ -21,13 +21,14 @@ public class PropertiesWindow {
             int x = (int)MouseListener.getScreenX();
             int y = (int)MouseListener.getScreenY();
             int gameObjectID = pickingTexture.readPixel(x, y);
+            System.out.println(gameObjectID);
             activeGameObject = currentScene.getGameObject(gameObjectID);
         }
     }
 
     public void imgui() {
         if(activeGameObject != null) {
-            ImGui.begin("Inspector");
+            ImGui.begin("Properties");
             activeGameObject.imgui();           // the focus/target game object is inspected by imgui
             ImGui.end();
         }

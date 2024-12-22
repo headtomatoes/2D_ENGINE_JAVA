@@ -4,9 +4,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class FrameBuffer {
-    private int fboID;
+    private int fboID = 0;
     private Texture texture = null;
-    private int rboID;
+
 
     public FrameBuffer(int width, int height) {
         // Generate the framebuffer
@@ -18,7 +18,7 @@ public class FrameBuffer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.texture.getID(), 0);
 
         // Create the render buffer object to store the depth info
-        rboID = glGenRenderbuffers();
+        int rboID = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, rboID);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID);
@@ -49,8 +49,5 @@ public class FrameBuffer {
         return fboID;
     }
 
-    public int getRboID() {
-        return rboID;
-    }
 
 }

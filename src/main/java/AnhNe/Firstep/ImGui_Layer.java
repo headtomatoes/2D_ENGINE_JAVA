@@ -175,10 +175,11 @@ public class ImGui_Layer {
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesDefault());
 
         fontConfig.setPixelSnapH(true);
-        fontAtlas.addFontFromFileTTF("assets/fonts/calibri.ttf", 20, fontConfig);
+        fontAtlas.addFontFromFileTTF("assets/fonts/calibri.ttf", 16, fontConfig);
 
 
         fontConfig.destroy(); // After all fonts were added we don't need this config more
+
 
         //build font atlas
         fontAtlas.build();
@@ -202,9 +203,8 @@ public class ImGui_Layer {
         gameViewWindow.imgui();
         propertiesWindow.update(deltaTime , currentScene);
         propertiesWindow.imgui();
-
+        ImGui.end();
         ImGui.render();
-
         endFrame();
     }
 
@@ -213,10 +213,11 @@ public class ImGui_Layer {
         int[] winHeight = {Window.getHeight()};
         double[] mousePosX = {0};
         double[] mousePosY = {0};
-        // Get window properties and mouse position
-        glfwGetWindowSize(glwfWindow, winWidth, winHeight);
-        glfwGetFramebufferSize(glwfWindow, winWidth, winHeight);
         glfwGetCursorPos(glwfWindow, mousePosX, mousePosY);
+//        Get window properties and mouse position
+//        glfwGetWindowSize(glwfWindow, winWidth, winHeight);
+//        glfwGetFramebufferSize(glwfWindow, winWidth, winHeight);
+//        glfwGetCursorPos(glwfWindow, mousePosX, mousePosY);
 
         // We SHOULD call those methods to update Dear ImGui state for the current frame
         final ImGuiIO io = ImGui.getIO();
@@ -248,7 +249,7 @@ public class ImGui_Layer {
         // set the window flags for the dockspace window (no title bar, no resize, no move, no scrollbar, no menu bar)
         int windowFlags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
         ImGui.setNextWindowPos(0.0f, 0.0f, ImGuiCond.Always);                               // set the window position to the top left corner of the window
-        ImGui.setNextWindowSize(Window.getWidth(), Window.getHeight(), ImGuiCond.Always);           // set the window size to the size of the window
+        ImGui.setNextWindowSize(Window.getWidth(), Window.getHeight());           // set the window size to the size of the window
         ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);                                 // set the window rounding to 0 (sharp corners)
         ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);                               // set the window border size to 0 (no border)
         windowFlags |= ImGuiWindowFlags.NoTitleBar
@@ -263,6 +264,5 @@ public class ImGui_Layer {
 
         // DockSpace
         ImGui.dockSpace(ImGui.getID("DockSpace"));
-        ImGui.end();
     }
 }
