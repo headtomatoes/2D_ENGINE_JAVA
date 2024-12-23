@@ -22,8 +22,8 @@ Maven or Gradle for dependency management
 ##Installation
 Clone the Repository
 ```
-git clone https://github.com/yourusername/java-game-engine.git
-cd java-game-engine
+git clone https://github.com/headtomatoes/2D_ENGINE_JAVA.git
+cd 2D_ENGINE_JAVA
 ```
 
 ## Dependencies
