@@ -148,4 +148,10 @@ public class MouseListener {
     public static float getDy() {
         return (float)(get().lastY - get().yPos);
     }
+
+    public static double getSrollY() {
+        return get().scrollY;
+    }
+
+
 }

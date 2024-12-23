@@ -15,12 +15,14 @@ public class GameObject {
     private List<Component> components;
     public Transform transform;
     private int zIndex;
+    private boolean doSerialization = true;
 
     public GameObject(String name, Transform transform, int zIndex) {
         this.name = name;
         this.components = new ArrayList<>();
         this.transform = transform;
         this.zIndex = zIndex;
+
         this.uID = GLOBAL_ID_COUNTER++; // Potential bug: if we remove a component, the uID will not be unique anymore
     }
 
@@ -72,7 +74,7 @@ public class GameObject {
     }
 
     public int getZIndex() {
-        return zIndex;
+        return this.zIndex;
     }
 
     public void imgui() {
@@ -99,5 +101,13 @@ public class GameObject {
 
     public static void init(int maxID){
         GLOBAL_ID_COUNTER = maxID;
+    }
+
+    public void setNoSerialize() {
+        this.doSerialization = false;
+    }
+
+    public boolean doSerialization() {
+        return this.doSerialization;
     }
 }

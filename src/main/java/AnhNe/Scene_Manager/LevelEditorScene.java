@@ -5,14 +5,18 @@ import AnhNe.Components.*;
 import AnhNe.Firstep.*;
 import AnhNe.Utility.AssetPool;
 
+import AnhNe.physics2d.PhysicsSystem2D;
+import AnhNe.physics2d.rigidbody.Rigidbody2D;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 
 public class LevelEditorScene extends Scene {
-    private GameObject obj1 = null;
     private SpriteSheet sprites;
-    SpriteRenderer obj1Sprite;
+
+    PhysicsSystem2D physics = new PhysicsSystem2D(1.0f / 60.0f, new Vector2f(0, -10));
+    Transform obj1, obj2;
+    Rigidbody2D rb1, rb2;
 
     GameObject levelEditorStuff = new GameObject("LevelEditorStuff", new Transform(new Vector2f(), new Vector2f()), 0);
 
@@ -22,38 +26,44 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        // Load the resources
+        loadResources();
+        // block sprite sheet
+        sprites = AssetPool.getSpriteSheet("assets/spriteSheet/mario/decorationsAndBlocks.png");
+        SpriteSheet gizmos = AssetPool.getSpriteSheet("assets/spriteSheet/mario/gizmos.png");
+        // Set the camera
+        this.camera = new Camera(new Vector2f(-150, -150));
         // set up the grid lines system
         levelEditorStuff.addComponent(new MouseControls());
         levelEditorStuff.addComponent(new GridlLines());
-        // Load the resources
-        loadResources();
-        // Set the camera
-        this.camera = new Camera(new Vector2f(-150, -150));
-        // block sprite sheet
-        sprites = AssetPool.getSpriteSheet("assets/spriteSheet/mario/decorationsAndBlocks.png");
-        if(levelLoaded) {
-            if (gameObjects.size() > 0) {
-                this.activeGameObject = gameObjects.get(0);
-            }
-        }
+        levelEditorStuff.addComponent(new EditorCamera(this.camera));
+        levelEditorStuff.addComponent(new TranslateGizmo(gizmos.getSprite(1),
+                Window.getImguiLayer().getPropertiesWindow()));
 
-//        obj1 = new GameObject("object1", new Transform(new Vector2f(100,200) , new Vector2f(256,256)), 3);
-//        obj1Sprite = new SpriteRenderer();
-//        obj1Sprite.setColor(new Vector4f(0, 1, 0, 1));
-//        obj1.addComponent(obj1Sprite);
-//        obj1.addComponent(new RigidBody());
+        // Add the level editor stuff to the scene
+        levelEditorStuff.start();
+
+        //        obj1 = new Transform(new Vector2f(100, 500));
+//        obj2 = new Transform(new Vector2f(100, 300));
 //
-//        this.addGameObjectToScene(obj1);
+//        rb1 = new Rigidbody2D();
+//        rb2 = new Rigidbody2D();
+//        rb1.setRawTransform(obj1);
+//        rb2.setRawTransform(obj2);
+//        rb1.setMass(100.0f);
+//        rb2.setMass(200.0f);
 //
-//        this.activeGameObject = obj1;// set the active game object(cheat)
+//        Circle c1 = new Circle();
+//        c1.setRadius(10.0f);
+//        c1.setRigidbody(rb1);
+//        Circle c2 = new Circle();
+//        c2.setRadius(20.0f);
+//        c2.setRigidbody(rb2);
+//        rb1.setCollider(c1);
+//        rb2.setCollider(c2);
 //
-//        GameObject obj2 = new GameObject("object2", new Transform(new Vector2f(600,200) , new Vector2f(256,256)),-2);
-//        SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
-//        Sprite obj2Sprite = new Sprite();
-//        obj2Sprite.setTexture(AssetPool.getTexture("assets/image/areUGays.png"));
-//        obj2SpriteRenderer.setSprite(obj2Sprite);
-//        obj2.addComponent(obj2SpriteRenderer);
-//        this.addGameObjectToScene(obj2);
+//        physics.addRigidbody(rb1, true);
+//        physics.addRigidbody(rb2, false);
     }
 
     public void loadResources(){
@@ -65,30 +75,35 @@ public class LevelEditorScene extends Scene {
                 new SpriteSheet(AssetPool.getTexture("assets/spriteSheet/mario/decorationsAndBlocks.png"),
                             16, 16, 81, 0));
 
+        AssetPool.addSpriteSheet("assets/spriteSheet/mario/gizmos.png",
+                new SpriteSheet(AssetPool.getTexture("assets/spriteSheet/mario/gizmos.png"),
+                        24, 48, 2, 0));
+
         AssetPool.getTexture("assets/image/areUGays.png");
 
-//        for (GameObject gObj : gameObjects) {
-//            if(gObj.getComponent(SpriteRenderer.class) != null) {
-//                SpriteRenderer sprite = gObj.getComponent(SpriteRenderer.class);
-//                if(sprite.getTexture() == null) {
-//                    sprite.setTexture(AssetPool.getTexture(sprite.getTexture().getFilePath()));
-//                }
-//            }
-//        }
+        for (GameObject gObj : gameObjects) {
+            if(gObj.getComponent(SpriteRenderer.class) != null) {
+                SpriteRenderer sprite = gObj.getComponent(SpriteRenderer.class);
+                if(sprite.getTexture() == null) {
+                    sprite.setTexture(AssetPool.getTexture(sprite.getTexture().getFilePath()));
+                }
+            }
+        }
     }
 
     @Override
     public void update(float deltaTime) {
         // Update the level editor stuff (grid lines, mouse controls) currently
         levelEditorStuff.update(deltaTime);
-
+        this.camera.adjustProjection();
         // Update the game objects
         for (GameObject gameObject : this.gameObjects) {
             gameObject.update(deltaTime);
         }
 
-        // Render the game objects
-        this.renderer.render();
+//        DebugDraw.addCircle(obj1.position, 10.0f, new Vector3f(1, 0, 0));
+//        DebugDraw.addCircle(obj2.position, 20.0f, new Vector3f(0.2f, 0.8f, 0.1f));
+//        physics.update(dt);
     }
 
     @Override
@@ -101,7 +116,10 @@ public class LevelEditorScene extends Scene {
     public void imgui() {
         // Scene imgui
         ImGui.begin("Level Editor Scene");
+        levelEditorStuff.imgui();
+        ImGui.end();
 
+        ImGui.begin("Test window");
         ImVec2 windowPos = new ImVec2();
         ImGui.getWindowPos(windowPos);
 

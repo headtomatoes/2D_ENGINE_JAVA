@@ -40,31 +40,20 @@ public class GameViewWindow {
     }
 
     private ImVec2 getLargestSizeForViewport() {
-        // Add null and bounds checks
         ImVec2 windowSize = new ImVec2();
         ImGui.getContentRegionAvail(windowSize);
-
-        // Prevent potential division by zero
-        float targetAspect = Math.max(Window.getTargetAspectRatio(), 0.1f);
-
-        // Add safety checks for minimum window size
-        windowSize.x = Math.max(windowSize.x, 10);
-        windowSize.y = Math.max(windowSize.y, 10);
-
-//        windowSize.x -= ImGui.getScrollX();
-//        windowSize.y -= ImGui.getScrollY();
+        windowSize.x -= ImGui.getScrollX();
+        windowSize.y -= ImGui.getScrollY();
 
         float aspectWidth = windowSize.x;
-        float aspectHeight = aspectWidth / targetAspect;
+        float aspectHeight = aspectWidth / Window.getTargetAspectRatio();
         if (aspectHeight > windowSize.y) {
-            // Switch to pillar box mode
+            // We must switch to pillarbox mode
             aspectHeight = windowSize.y;
-            aspectWidth = aspectHeight * targetAspect;
+            aspectWidth = aspectHeight * Window.getTargetAspectRatio();
         }
-        return new ImVec2(
-                Math.max(aspectWidth, 10),
-                Math.max(aspectHeight, 10)
-        );
+
+        return new ImVec2(aspectWidth, aspectHeight);
     }
 
     private ImVec2 getCenteredPositionForViewport(ImVec2 aspectSize) {

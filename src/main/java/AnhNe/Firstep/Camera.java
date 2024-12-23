@@ -10,7 +10,7 @@ public class Camera {
     private Matrix4f projectionMatrix, viewMatrix , inverseProjection, inverseView;
     public Vector2f position;
     private Vector2f projectionSize = new Vector2f(32.0f * 40.0f, 32.0f * 21.0f);
-
+    private float zoom = 1.0f;
 
     // Constructor creates a camera with a given position and initializes the projection and view matrix
     public Camera(Vector2f position) {
@@ -37,7 +37,7 @@ public class Camera {
         // near, far: the distances to the near and far depth clipping planes
         // the near and far values are the distances from the camera to the near and far clipping planes
         // the limits of the world space are 32.0f * 40.0f and 32.0f * 21.0f in the x and y axis = 1280.0f and 672.0f
-        projectionMatrix.ortho(0.0f, projectionSize.x , 0.0f, projectionSize.y, 0.0f, 100.0f);
+        projectionMatrix.ortho(0.0f, projectionSize.x * this.zoom , 0.0f, projectionSize.y * this.zoom, 0.0f, 100.0f);
 
         // invert the projection matrix to get the inverse projection matrix
         // get the inverse projection matrix to transform the screen space to the world space
@@ -90,5 +90,17 @@ public class Camera {
     // Get the projection size
     public Vector2f getProjectionSize() {
         return this.projectionSize;
+    }
+
+    public float getZoom() {
+        return this.zoom;
+    }
+
+    public void setZoom(float value) {
+        this.zoom = value;
+    }
+
+    public void addZoom(float value) {
+        this.zoom += value;
     }
 }

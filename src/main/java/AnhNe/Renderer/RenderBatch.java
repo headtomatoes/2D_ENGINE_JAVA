@@ -3,6 +3,7 @@ package AnhNe.Renderer;
 import AnhNe.Components.SpriteRenderer;
 import AnhNe.Firstep.Window;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -204,6 +205,17 @@ public class RenderBatch implements Comparable<RenderBatch> {
                 }
             }
         }
+
+        boolean isRotated = sprite.gameObject.transform.rotation != 0.0f;
+        Matrix4f transformationMatrix = new Matrix4f().identity();
+        if(isRotated) {
+            transformationMatrix.translate(sprite.gameObject.transform.position.x, sprite.gameObject.transform.position.y, 0.0f);
+            transformationMatrix.rotate((float) Math.toRadians(sprite.gameObject.transform.rotation), 0.0f, 0.0f, 1.0f);
+            transformationMatrix.scale(sprite.gameObject.transform.scale.x, sprite.gameObject.transform.scale.y, 1.0f);
+        } else {
+            transformationMatrix.translate(sprite.gameObject.transform.position.x, sprite.gameObject.transform.position.y, 0.0f)
+                    .scale(sprite.gameObject.transform.scale.x, sprite.gameObject.transform.scale.y, 1.0f);
+        }
         // Add the vertices with the appropriate properties
         float xAdd = 1.0f;
         float yAdd = 1.0f;
@@ -215,9 +227,15 @@ public class RenderBatch implements Comparable<RenderBatch> {
             } else if(i == 3) {
                 yAdd = 1.0f;
             }
+
+            Vector4f currentPos = new Vector4f(sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x),
+                    sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y), 0.0f, 1.0f);
+            if(isRotated) {
+                currentPos = new Vector4f(xAdd, yAdd, 0.0f, 1.0f).mul(transformationMatrix);
+            }
             //load position
-            verticesArray[offset] = sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
-            verticesArray[offset + 1] = sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+            verticesArray[offset] = currentPos.x;
+            verticesArray[offset + 1] = currentPos.y;
 
             //load color
             verticesArray[offset + 2] = color.x;

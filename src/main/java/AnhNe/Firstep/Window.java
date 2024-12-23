@@ -1,5 +1,6 @@
 package AnhNe.Firstep;
 
+import AnhNe.Editor.GameViewWindow;
 import AnhNe.Input_Manager.KeyListener;
 import AnhNe.Input_Manager.MouseListener;
 import AnhNe.Renderer.*;
@@ -7,6 +8,8 @@ import AnhNe.Scene_Manager.LevelEditorScene;
 import AnhNe.Scene_Manager.LevelScene;
 import AnhNe.Scene_Manager.Scene;
 import AnhNe.Utility.AssetPool;
+import imgui.ImGui;
+import imgui.ImVec2;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -28,6 +31,7 @@ public class Window {
     private FrameBuffer frameBuffer;
     private static Scene currentScene;
     private PickingTexture pickingTexture;
+    private GameViewWindow gameViewWindow;
 
     // Singleton pattern: only one instance of Window can be created
     private static Window window = null;
@@ -66,14 +70,6 @@ public class Window {
             Window.window = new Window();
         }
         return Window.window;
-    }
-
-    public static FrameBuffer getFrameBuffer() {
-        return get().frameBuffer;
-    }
-
-    public static float getTargetAspectRatio() {
-        return 16.0f / 9.0f;
     }
 
     // Run the window
@@ -199,8 +195,6 @@ public class Window {
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            // TODO: fix the frame buffer
-            //this.frameBuffer.bind();
             if (deltaTime >= 0) {
                 DebugDraw.drawLine2D();
                 Renderer.bindShader(defaultShader);
@@ -211,7 +205,8 @@ public class Window {
 
             this.imGuiLayer.update(deltaTime, currentScene);
             glfwSwapBuffers(glfwWindow);
-
+            MouseListener.endFrame();
+            //System.out.println("FPS: " + 1.0f / deltaTime);
             timeEnd = (float) glfwGetTime();
             deltaTime = timeEnd - timeBegin;
             timeBegin = timeEnd;
@@ -221,7 +216,8 @@ public class Window {
     }
 
     public static Scene getScene() {
-        return get().currentScene;
+        get();
+        return currentScene;
     }
 
     public static int getWidth() {
@@ -240,4 +236,14 @@ public class Window {
         get().width = newWidth;
     }
 
+    public static ImGui_Layer getImguiLayer() {
+        return get().imGuiLayer;
+    }
+    public static FrameBuffer getFrameBuffer() {
+        return get().frameBuffer;
+    }
+
+    public static float getTargetAspectRatio() {
+        return 16.0f / 9.0f;
+    }
 }

@@ -142,6 +142,7 @@ public class ImGui_Layer {
         glfwSetScrollCallback( glwfWindow, (w, xOffset, yOffset) -> {
             io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
             io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+            MouseListener.mouseScrollCallBack(w, xOffset, yOffset);
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
@@ -214,10 +215,6 @@ public class ImGui_Layer {
         double[] mousePosX = {0};
         double[] mousePosY = {0};
         glfwGetCursorPos(glwfWindow, mousePosX, mousePosY);
-//        Get window properties and mouse position
-//        glfwGetWindowSize(glwfWindow, winWidth, winHeight);
-//        glfwGetFramebufferSize(glwfWindow, winWidth, winHeight);
-//        glfwGetCursorPos(glwfWindow, mousePosX, mousePosY);
 
         // We SHOULD call those methods to update Dear ImGui state for the current frame
         final ImGuiIO io = ImGui.getIO();
@@ -264,5 +261,9 @@ public class ImGui_Layer {
 
         // DockSpace
         ImGui.dockSpace(ImGui.getID("DockSpace"));
+    }
+
+    public PropertiesWindow getPropertiesWindow() {
+        return this.propertiesWindow;
     }
 }

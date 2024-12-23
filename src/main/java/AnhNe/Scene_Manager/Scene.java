@@ -24,7 +24,6 @@ public abstract class Scene {
     protected Camera camera;
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
-    protected GameObject activeGameObject = null;
     protected boolean levelLoaded = false;
 
     public Scene() {
@@ -71,9 +70,15 @@ public abstract class Scene {
     }
 
     public void saveExit(){
+        Gson gson = createGson();
         try (FileWriter writer = new FileWriter("levelTest.txt")) {
-            Gson gson = createGson();
-            writer.write(gson.toJson(this.gameObjects));
+            List <GameObject> objsToSerialize = new ArrayList<>();
+            for (GameObject gameObject : this.gameObjects) {
+                if (gameObject.doSerialization()) {
+                    objsToSerialize.add(gameObject);
+                }
+            }
+            writer.write(gson.toJson(objsToSerialize));
         } catch (IOException e) {
             e.printStackTrace();
             // Consider adding more robust error handling
