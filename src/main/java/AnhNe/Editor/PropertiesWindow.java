@@ -1,6 +1,6 @@
 package AnhNe.Editor;
 
-import AnhNe.Firstep.GameObject;
+import AnhNe.Engine.GameObject;
 import AnhNe.Input_Manager.MouseListener;
 import AnhNe.Renderer.PickingTexture;
 import AnhNe.Scene_Manager.Scene;

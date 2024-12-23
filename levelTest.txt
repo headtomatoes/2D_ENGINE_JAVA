@@ -1,0 +1,61 @@
+[
+  {
+    "uID": 2,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "AnhNe.Components.SpriteRenderer",
+        "data": {
+          "color": {
+            "x": 0.6315789,
+            "y": 0.43515489,
+            "z": 0.43515489,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filePath": "assets/spriteSheet/mario/decorationsAndBlocks.png",
+              "textureID": 5,
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.71428573,
+                "y": 0.16666667
+              },
+              {
+                "x": 0.71428573,
+                "y": 0.083333336
+              },
+              {
+                "x": 0.5714286,
+                "y": 0.083333336
+              },
+              {
+                "x": 0.5714286,
+                "y": 0.16666667
+              }
+            ]
+          },
+          "uID": 6
+        }
+      }
+    ],
+    "transform": {
+      "position": {
+        "x": 288.0,
+        "y": 256.0
+      },
+      "scale": {
+        "x": 32.0,
+        "y": 32.0
+      },
+      "rotation": 0.0
+    },
+    "zIndex": 0,
+    "doSerialization": true
+  }
+]

@@ -1,7 +1,7 @@
 package AnhNe.Renderer;
 
 import AnhNe.Components.SpriteRenderer;
-import AnhNe.Firstep.GameObject;
+import AnhNe.Engine.GameObject;
 
 import java.util.ArrayList;
 import java.util.Collections;

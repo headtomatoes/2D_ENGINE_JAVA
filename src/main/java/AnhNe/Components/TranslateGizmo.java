@@ -1,9 +1,9 @@
 package AnhNe.Components;
 
 import AnhNe.Editor.PropertiesWindow;
-import AnhNe.Firstep.GameObject;
-import AnhNe.Firstep.PreFabricate;
-import AnhNe.Firstep.Window;
+import AnhNe.Engine.GameObject;
+import AnhNe.Engine.PreFabricate;
+import AnhNe.Engine.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 

@@ -1,7 +1,7 @@
 package AnhNe.Components;
 
-import AnhNe.Firstep.Camera;
-import AnhNe.Firstep.Window;
+import AnhNe.Engine.Camera;
+import AnhNe.Engine.Window;
 import AnhNe.Utility.Settings;
 import AnhNe.Renderer.DebugDraw;
 import org.joml.Vector2f;
